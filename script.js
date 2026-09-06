@@ -17,6 +17,7 @@
   var metanavButtons = document.querySelectorAll('.metanav-btn');
   var lineContent = document.getElementById('line-content');
   var backBtn = document.getElementById('designs-back-btn');
+  var escHint = document.getElementById('esc-hint');
 
   if (!phoneShowcase || !phoneBtn || !linePanel || !metanavGrid || !lineContent || metanavButtons.length === 0) return;
 
@@ -36,6 +37,26 @@
   // how long .line-content's fade-out takes — must match the opacity
   // transition on .line-content in styles.css
   var CONTENT_FADE_MS = 250;
+  // how long a preview stays open before the Esc-hint fades in beside it
+  var ESC_HINT_DELAY_MS = 1000;
+  var escHintTimer = null;
+
+  function hideEscHint() {
+    if (escHintTimer) {
+      clearTimeout(escHintTimer);
+      escHintTimer = null;
+    }
+    if (escHint) escHint.classList.remove('is-visible');
+  }
+
+  function scheduleEscHint() {
+    hideEscHint();
+    if (!escHint) return;
+    escHintTimer = setTimeout(function () {
+      escHint.classList.add('is-visible');
+      escHintTimer = null;
+    }, ESC_HINT_DELAY_MS);
+  }
 
   function renderContent(data, index) {
     return '<div class="line-content-inner"><img src="assets/Designs/' + data.image + '" alt="' +
@@ -67,6 +88,7 @@
 
     metanavGrid.classList.add('is-hidden');
     if (backBtn) backBtn.classList.add('is-visible');
+    scheduleEscHint();
   }
 
   // Back button: close the preview, return to the 8 apps
@@ -74,6 +96,7 @@
     lineContent.classList.remove('is-visible');
     metanavGrid.classList.remove('is-hidden');
     if (backBtn) backBtn.classList.remove('is-visible');
+    hideEscHint();
   }
 
   // full reset: back to the ringing phone, as if a fresh visit
@@ -84,6 +107,7 @@
     lineContent.innerHTML = '';
     metanavGrid.classList.remove('is-hidden');
     if (backBtn) backBtn.classList.remove('is-visible');
+    hideEscHint();
   }
 
   phoneBtn.addEventListener('click', answerPhone);

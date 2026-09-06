@@ -854,6 +854,31 @@ section {
   transform: scale(1.1);
 }
 
+/* -------- Esc hint: quiet "how to go back" reminder --------
+   Sits just outside the left edge of Line.png. Hidden by default;
+   script.js adds .is-visible about 1s after a design preview opens,
+   and removes it immediately on Back/Esc/reset so it never lingers
+   once the visitor already knows what to do. */
+.esc-hint {
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  width: 34%;
+  min-width: 130px;
+  max-width: 300px;
+  transform: translateY(-50%) translateX(-8px);
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.5));
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 3;
+}
+
+.esc-hint.is-visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
 @media (max-width: 860px) {
   .line-panel {
     width: min(94%, 420px);
@@ -868,6 +893,18 @@ section {
     top: -6%;
     left: -4%;
     width: 20%;
+  }
+  /* not enough room to the left on narrow screens — sit it above instead */
+  .esc-hint {
+    top: -14%;
+    left: 50%;
+    width: 40%;
+    min-width: 80px;
+    max-width: 160px;
+    transform: translateX(-50%) translateY(8px);
+  }
+  .esc-hint.is-visible {
+    transform: translateX(-50%) translateY(0);
   }
 }
 
@@ -939,13 +976,16 @@ section {
 }
 
 /* dot texture, same pattern as body::before, sized past the wedge's
-   own edges so the parallax drift never uncovers a bare corner */
+   own edges so the parallax drift never uncovers a bare corner —
+   darker and more opaque than the body-wide dots so it actually reads
+   against the wedge, matching the bolder contrast of the Designs
+   section's star shapes */
 .education-bg-grey::before {
   content: "";
   position: absolute;
   inset: -40px;
-  opacity: 0.3;
-  background-image: radial-gradient(#c8c8c8 1.5px, transparent 1.5px);
+  opacity: 0.65;
+  background-image: radial-gradient(#0d0d0d 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
