@@ -65,6 +65,7 @@ body::before {
 .work-bg,
 .education-bg,
 .education-bg-grey::before,
+.contact-slab,
 #work::before,
 #work::after,
 body::before {
@@ -75,6 +76,7 @@ body::before {
 body::before             { --depth: 0.35; }
 .hero-slab                { --depth: 1; }
 .about-slab                { --depth: 1; }
+.contact-slab              { --depth: 1; }
 .designs-bg                { --depth: 1.3; }
 .work-bg                   { --depth: 1.1; }
 .education-bg              { --depth: 0.9; }
@@ -93,6 +95,7 @@ body::before             { --depth: 0.35; }
 .screen:not(.active) .designs-bg,
 .screen:not(.active) .work-bg,
 .screen:not(.active) .education-bg,
+.screen:not(.active) .contact-slab,
 .screen:not(.active) .education-bg-grey::before {
   transform: none;
 }
@@ -386,22 +389,20 @@ section {
   z-index: 1;
 }
 
-/* -------- TITLE-LOCK FIX --------
-   Designs/Projects/Education used to scroll (overflow-y:auto) on the
-   <section> itself, with the top-left title as a plain "position:fixed"
-   child of that same scrolling box. Some browsers (Safari in particular)
-   drag a fixed element along with an ancestor's scroll in that setup.
-   The reliable fix is to never let the title share a scroll container
-   at all: the section stays put (overflow hidden) and only THIS wrapper
-   — placed after the title in the markup — scrolls. The title is a
-   sibling, not a descendant, of the thing that scrolls, so it has
-   nothing to get dragged by. */
+/* -------- TITLE-LOCK FIX (legacy note) --------
+   Designs/Projects/Education scroll on THIS wrapper, not on the
+   <section> itself, which keeps things stable across browsers.
+   The title now lives inside this wrapper too (see index.html), so
+   it scrolls away with everything else — top padding is trimmed
+   since the title supplies its own spacing via .section-header's
+   margin-bottom; bottom padding stays generous so the last bit of
+   content never sits flush against the viewport edge. */
 .screen-scroll {
   position: absolute;
   inset: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 7rem clamp(1.25rem, 6vw, 6rem);
+  padding: 2rem clamp(1.25rem, 6vw, 6rem) 7rem;
 }
 
 .screen.active {
@@ -415,10 +416,10 @@ section {
    ABOUT SECTION
    =================================================== */
 /* the About section is full-bleed so the Confidant image can fill it
-   completely. Same title-lock fix as Designs/Projects/Education: the
-   section itself never scrolls, only .about-scroll (a no-padding
-   variant of .screen-scroll, so the full-bleed art is untouched) does —
-   that keeps .section-header pinned no matter how far the content scrolls. */
+   completely — .about-scroll stays padding:0 so that art still runs
+   edge-to-edge. The title now lives inside .about-scroll too, so it
+   gets its own inset below (see .about-scroll .section-header)
+   instead of the wrapper being padded, which would also indent the art. */
 #about {
   position: fixed;
   inset: 0;
@@ -436,15 +437,22 @@ section {
   padding: 0;
 }
 
+/* only the title gets an inset here, the full-bleed art below it doesn't */
+.about-scroll .section-header {
+  padding: 2rem clamp(1.25rem, 6vw, 6rem) 0;
+  margin-bottom: 0;
+}
+
 /* -------- SHARED SECTION TITLE TREATMENT --------
-   Every section (About/Designs/Projects/Education) shows its title
-   image top-left with the same skewed red underline, so one set of
-   classes covers all four instead of four near-identical copies. */
+   Every section (About/Designs/Projects/Education/Contact) shows its
+   title image top-left with the same skewed red underline. It now
+   lives inside each section's own scrolling wrapper (in the markup),
+   so it scrolls away with the rest of the content instead of staying
+   pinned on screen — this rule just adds the gap before whatever
+   comes after it. */
 .section-header {
-  position: fixed;
-  top: 2rem;
-  left: clamp(1.25rem, 6vw, 6rem);
-  z-index: 2;
+  position: relative;
+  margin-bottom: 2.5rem;
 }
 
 .title-wrap {
@@ -884,7 +892,7 @@ section {
     width: min(94%, 420px);
   }
   .section-header {
-    top: 1.2rem;
+    margin-bottom: 1.75rem;
   }
   .section-title {
     width: clamp(130px, 34vw, 200px);
@@ -1016,7 +1024,7 @@ section {
   }
 
   .contact-panel {
-    padding: 3rem 1.25rem;
+    padding: 1rem 1.25rem 0.5rem;
   }
 
   .contact-form {
@@ -1056,25 +1064,6 @@ section {
 .project-card:hover .project-img {
   transform: scale(1.06) rotate(-1deg);
   filter: drop-shadow(8px 8px 0 rgba(0, 0, 0, 0.4));
-}
-
-/* still used by the "06 Contacts" badge in the contact section below */
-.project-tag {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--red);
-  border: 1px solid var(--red);
-  padding: 0.2rem 0.6rem;
-  margin-bottom: 1rem;
-}
-
-/* dark variant used on the red Contact panel, where the default red tag
-   would be invisible against a red background */
-.project-tag--dark {
-  border-color: var(--black);
-  color: var(--black);
-  margin-bottom: 1.4rem;
 }
 
 /* Projects gets its own background so it doesn't read as identical to
@@ -1202,66 +1191,146 @@ section {
   height: auto; /* sized from the file's own aspect ratio, never stretched */
 }
 
-/* shared "download" style button — used by the About CV link and the
-   contact form's send button */
+/* CV download button in the Education section, now PDF.png with no
+   button box/text around it */
 .cv-btn {
-  position: relative;
-  z-index: 1;
   display: inline-block;
   margin-top: 2rem;
-  font-weight: 700;
-  background: var(--red);
-  color: var(--black);
-  padding: 0.9rem 1.6rem;
+  background: none;
   border: none;
-  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
-  transition: transform 0.2s ease;
+  padding: 0;
   cursor: pointer;
-  font: inherit;
+  transition: transform 0.2s ease;
 }
 
 .cv-btn:hover {
   transform: translateY(-2px);
 }
 
+.cv-btn-img {
+  display: block;
+  width: clamp(140px, 18vw, 200px);
+  height: auto;
+}
+
 /* ===================================================
    CONTACT SECTION
    =================================================== */
-.contact-panel {
+
+/* base tone for the section itself is charcoal (grey) — the slab
+   below only paints over the bottom portion, so this grey shows
+   through up top, same idea as the hero but flipped. */
+#contact {
+  background: var(--charcoal);
+  /* the title now lives in-flow at the top of this same scrolling
+     section (see index.html), so this just needs a small inset
+     above it rather than clearance for a separately-pinned title */
+  padding-top: 2rem;
+}
+
+/* -------- background slab --------
+   Same technique as .hero-slab (photo + color tint + drifting diagonal
+   stripes, clipped to a diagonal band, tracked by the shared parallax
+   system) but mirrored top-to-bottom: the hero's photo band sits at
+   the TOP with plain dark space below it; here the photo band sits at
+   the BOTTOM (tinted red) with the plain charcoal grey above it.
+   Sized 40px past the viewport on every side so the parallax drift
+   never uncovers a bare edge. */
+.contact-slab {
+  position: fixed;
+  top: -40px;
+  left: -40px;
+  right: -40px;
+  bottom: -40px;
+  z-index: -1;
+  background-image: url("assets/Steven1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  clip-path: polygon(0 100%, 100% 100%, 100% 38%, 0 22%);
+}
+
+/* same red tint used on .hero-slab::before */
+.contact-slab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: var(--red);
-  color: var(--black);
-  padding: 5rem clamp(1.5rem, 6vw, 5rem);
-  clip-path: polygon(0 6%, 100% 0, 100% 100%, 0 94%);
-  text-align: left;
+  opacity: 0.7;
 }
 
-.contact-panel h2 {
-  font-family: 'Arsenal', serif;
-  font-style: normal;
-  font-size: clamp(2.2rem, 6vw, 4.5rem);
-  max-width: 16ch;
+/* same drifting diagonal stripes as every other slab */
+.contact-slab::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
+  animation: stripe-drift 14s steps(24) infinite;
+  contain: strict;
 }
 
-.contact-panel p {
-  font-family: 'Times New Roman', Times, serif;
-  margin-top: 1.2rem;
-  font-weight: 600;
-  max-width: 50ch;
+.contact-panel {
+  position: relative;
+  z-index: 1;
+  /* trimmed from 5rem so the dialogue image (and everything below it)
+     sits closer to the title instead of floating in empty space */
+  padding: 1.5rem clamp(1.5rem, 6vw, 5rem) 0.5rem;
+}
+
+/* -------- Dialogue.png --------
+   The panel's only content now, so it stays in normal flow (its own
+   height defines the panel's height instead of collapsing to zero).
+   Tweak these three variables to resize/reposition it — nothing
+   else needs to change:
+     --dialogue-width       : how big the image renders
+     --dialogue-margin-top  : nudges it down (or up, with a negative value)
+     --dialogue-margin-left : nudges it right (or left, with a negative value)
+   Any CSS length works (%, px, rem, vw, etc). */
+.dialogue-bg {
+  --dialogue-width: 130%;
+  --dialogue-margin-top: -55px;
+  --dialogue-margin-left: -130px;
+
+  display: block;
+  width: var(--dialogue-width);
+  height: auto;
+  margin-top: var(--dialogue-margin-top);
+  margin-left: var(--dialogue-margin-left);
+  pointer-events: none;
+  user-select: none;
 }
 
 .contact-list {
-  margin-top: 2.2rem;
+  /* trimmed down from clamp(3.5rem, 8vw, 6rem) to bring the icons
+     closer to Dialogue.png — still enough gap that it won't touch it */
+  margin-top: clamp(1.25rem, 3vw, 2rem);
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
+/* -------- social/contact icons --------
+   Each icon is its own PNG (Email/Facebook/Insta/Git/CVpic) rather
+   than a text chip; the container just gives it a soft, app-icon-style
+   rounded square. Tweak --chip-size/--chip-radius to resize. */
 .contact-chip {
-  font-family: 'Jost', sans-serif;
-  font-weight: 700;
+  --chip-size: 56px;
+  --chip-radius: 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--chip-size);
+  height: var(--chip-size);
+  border-radius: var(--chip-radius);
+  overflow: hidden;
   background: var(--charcoal);
-  color: var(--paper);
-  padding: 0.7rem 1.3rem;
   border: 1px solid var(--line);
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
@@ -1269,6 +1338,13 @@ section {
 .contact-chip:hover {
   transform: translateY(-2px);
   border-color: var(--red);
+}
+
+.contact-chip-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* -------- message form -------- */
@@ -1280,12 +1356,11 @@ section {
   gap: 1.1rem;
 }
 
-.form-head {
-  font-family: 'Jost', sans-serif;
-  font-weight: 600;
-  font-size: 1.3rem;
-  color: var(--red);
-  text-transform: uppercase;
+/* "Send me a message" heading, now Send.png instead of text */
+.form-head-img {
+  display: block;
+  width: clamp(220px, 30vw, 340px);
+  height: auto;
 }
 
 .field {
@@ -1297,21 +1372,39 @@ section {
   color: var(--grey);
 }
 
+/* "Your email" / "Message" labels, now images instead of text */
+.field-label-img {
+  display: block;
+  width: clamp(110px, 16vw, 160px);
+  height: auto;
+}
+
+/* Comic-panel style boxes, inspired by the thick-border/hard-shadow
+   treatment used elsewhere in the persona theme — paper background
+   with a bold black border, a slight skew for the dynamic feel, and
+   a hard offset red shadow on focus instead of a soft glow. */
 .field input,
 .field textarea {
-  background: var(--charcoal);
-  border: 1px solid var(--line);
-  color: var(--paper);
+  background: var(--paper);
+  border: 3px solid var(--black);
+  color: var(--black);
   padding: 0.75rem 0.9rem;
   font-family: 'Jost', sans-serif;
   font-size: 0.95rem;
   resize: vertical;
+  transform: skewX(-2deg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field textarea {
+  min-height: 120px;
 }
 
 .field input:focus,
 .field textarea:focus {
   outline: none;
   border-color: var(--red);
+  box-shadow: 4px 4px 0 var(--red);
 }
 
 .form-foot {
@@ -1321,8 +1414,24 @@ section {
   flex-wrap: wrap;
 }
 
+/* "Send it" button, now Sent.png with no button box around it */
 .form-send {
-  font-family: 'Jost', sans-serif;
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.form-send:hover {
+  transform: translateY(-2px);
+}
+
+.form-send-img {
+  display: block;
+  width: clamp(120px, 16vw, 170px);
+  height: auto;
 }
 
 #form-status {
@@ -1389,6 +1498,14 @@ footer {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+/* hidden while a Designs preview is open — the dedicated Back.png
+   button already returns to the app grid, so showing both was
+   confusing (see script.js, .preview-open) */
+body.preview-open .back-to-top {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .back-to-top img {

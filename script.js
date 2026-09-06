@@ -88,6 +88,10 @@
 
     metanavGrid.classList.add('is-hidden');
     if (backBtn) backBtn.classList.add('is-visible');
+    // the dedicated Back.png button above already returns to the app
+    // grid, so hide the global back-to-top button while a preview is
+    // open — having both on screen at once was confusing
+    document.body.classList.add('preview-open');
     scheduleEscHint();
   }
 
@@ -96,6 +100,7 @@
     lineContent.classList.remove('is-visible');
     metanavGrid.classList.remove('is-hidden');
     if (backBtn) backBtn.classList.remove('is-visible');
+    document.body.classList.remove('preview-open');
     hideEscHint();
   }
 
@@ -107,6 +112,7 @@
     lineContent.innerHTML = '';
     metanavGrid.classList.remove('is-hidden');
     if (backBtn) backBtn.classList.remove('is-visible');
+    document.body.classList.remove('preview-open');
     hideEscHint();
   }
 
@@ -164,7 +170,7 @@
   var form = document.getElementById('contact-form');
   if (!form) return;
 
-  var CONTACT_EMAIL = 'hello@stevenpunay.design';
+  var CONTACT_EMAIL = 'punay.stevenkenn.bscs2025@gmail.com';
   var status = document.getElementById('form-status');
   var btn = form.querySelector('.form-send');
 
@@ -242,6 +248,10 @@
     currentId = id;
     document.body.dataset.screen = id;
     if (backBtn) backBtn.classList.toggle('is-visible', id !== 'top');
+    // leaving Designs entirely (not just closing its preview) should
+    // always clear this, so the global back-to-top button doesn't
+    // stay hidden on other screens
+    if (id !== 'designs') document.body.classList.remove('preview-open');
   }
 
   function goTo(id) {
