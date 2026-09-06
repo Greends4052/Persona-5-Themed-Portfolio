@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Morgan — Portfolio</title>
+
+  <!-- fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Arsenal:ital,wght@0,400;0,700;1,400&family=Jost:wght@400;500;600;700&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <!-- my own stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============== BACK TO MAIN MENU ==============
+       Fixed button, always on screen, jumps back to the
+       hero section where the command-stack menu lives. -->
+  <a href="#top" class="back-to-top nav-link" aria-label="Back to main menu">
+    <img src="assets/back.png" alt="">
+  </a>
+
+  <!-- ============== HERO SECTION ============== -->
+  <section class="hero screen active" id="top">
+    <div class="hero-slab" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <img src="assets/Myportfolio.png" alt="Take Your Portfolio." class="hero-title-img">
+        <img src="assets/Calling.png" alt="Calling card" class="calling-card">
+      </div>
+      <ul class="command-stack">
+        <li><a href="#about" class="nav-link"><img src="assets/About_me.png" alt="About Me"></a></li>
+        <li><a href="#designs" class="nav-link"><img src="assets/Designs.png" alt="Designs"></a></li>
+        <li><a href="#work" class="nav-link"><img src="assets/Projects.png" alt="Projects"></a></li>
+        <li><a href="#education" class="nav-link"><img src="assets/Education.png" alt="Education"></a></li>
+        <li><a href="#contact" class="nav-link"><img src="assets/Contacts.png" alt="Contacts"></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============== ABOUT SECTION ============== -->
+  <section id="about" class="screen">
+    <div class="about-slab" aria-hidden="true"></div>
+    <div class="confidant-stack">
+      <img src="assets/Steven.png" alt="Steven Punay, a counselor recently hired at Shujin Academy" class="confidant-layer confidant-steven">
+      <img src="assets/Rank.png" alt="Confidant rank details" class="confidant-layer confidant-rank">
+      <img src="assets/Councillor.png" alt="Councillor arcana tarot card" class="confidant-layer confidant-councillor">
+    </div>
+  </section>
+
+  <!-- ============== DESIGNS SECTION ==============
+       A phone rings center-stage; answering it slides Line.png
+       up with 9 Metanav app icons on it, like unlocking a phone
+       to a home screen. Picking an app reveals that project's
+       preview plus a Back button that returns to the 9 apps. -->
+  <section id="designs" class="screen">
+    <!-- rotating star backdrop, same treatment as the reference site -->
+    <div class="designs-bg" aria-hidden="true">
+      <svg class="bg-star" style="left:6%;top:8%;width:26vmax;height:26vmax" viewBox="0 0 100 100">
+        <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#000"/>
+      </svg>
+      <svg class="bg-star s2" style="right:4%;bottom:6%;width:34vmax;height:34vmax" viewBox="0 0 100 100">
+        <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#fff"/>
+      </svg>
+    </div>
+
+    <div class="design-header">
+      <div class="design-title-wrap">
+        <img src="assets/Designs.png" alt="Designs" class="design-title">
+      </div>
+    </div>
+
+    <!-- everything that can actually grow taller than the viewport lives in
+         here now, so THIS is what scrolls — the title above stays outside
+         it and never moves (see the .screen-scroll fix in styles.css) -->
+    <div class="screen-scroll">
+      <div class="phone-showcase" id="phone-showcase">
+        <!-- Phone.png: rings until answered -->
+        <button class="phone-btn" id="phone-btn" type="button" aria-label="Answer the call to view designs">
+          <img src="assets/Phone.png" alt="" class="phone-img">
+        </button>
+
+        <!-- Line.png panel: hidden until the phone is answered, then slides
+             up like pulling your phone out of your pocket -->
+        <div class="line-panel" id="line-panel">
+          <img src="assets/Line.png" alt="" class="line-img">
+
+          <!-- 9 Metanav app icons, same angle/style as before, multiplied to 9 -->
+          <div class="metanav-grid" id="metanav-grid">
+            <button class="metanav-btn" type="button" data-index="0" aria-label="Design 1"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="1" aria-label="Design 2"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="2" aria-label="Design 3"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="3" aria-label="Design 4"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="4" aria-label="Design 5"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="5" aria-label="Design 6"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="6" aria-label="Design 7"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="7" aria-label="Design 8"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+            <button class="metanav-btn" type="button" data-index="8" aria-label="Design 9"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
+          </div>
+
+          <div class="line-content" id="line-content"></div>
+
+          <!-- Back button: only visible once a design preview is open -->
+          <button class="back-btn" id="designs-back-btn" type="button" aria-label="Back to apps">
+            <img src="assets/Back.png" alt="" class="back-btn-img">
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PROJECTS SECTION ============== -->
+  <section id="work" class="screen">
+    <!-- tiled star field, built with inline SVG instead of an image file —
+         grayscale to match the section's charcoal palette -->
+    <div class="work-bg" aria-hidden="true">
+      <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <pattern id="work-star-pattern" width="200" height="200" patternUnits="userSpaceOnUse">
+            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
+                     fill="#3a3a3a" opacity="0.6" transform="translate(10,10) scale(0.9)"></polygon>
+            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
+                     fill="#5a5a5a" opacity="0.35" transform="translate(115,55) scale(0.55) rotate(25 50 50)"></polygon>
+            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
+                     fill="#151515" opacity="0.5" transform="translate(55,130) scale(0.7) rotate(-18 50 50)"></polygon>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#work-star-pattern)"></rect>
+      </svg>
+    </div>
+    <div class="project-header">
+      <div class="project-title-wrap">
+        <img src="assets/Projects.png" alt="Projects" class="project-title">
+      </div>
+    </div>
+    <!-- scrolls independently of .project-header above, so the title
+         never drifts (see the .screen-scroll fix in styles.css) -->
+    <div class="screen-scroll">
+      <div class="project-grid">
+        <div class="project-card"><img src="assets/file1.png" alt="Project 1" class="project-img"></div>
+        <div class="project-card"><img src="assets/file2.png" alt="Project 2" class="project-img"></div>
+        <div class="project-card"><img src="assets/file3.png" alt="Project 3" class="project-img"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ABOUT / CV SECTION ==============
+       Was the education timeline / bio section. The bio copy and
+       photo are gone entirely now — the section just displays
+       CV.png inside the box, plus a download link underneath.
+       The nav icon still reads "Education" (assets/Education.png)
+       since that's an image asset — swap it whenever you have an
+       "About" graphic. -->
+  <section id="education" class="screen">
+    <div class="education-header">
+      <div class="education-title-wrap">
+        <img src="assets/Education.png" alt="About" class="education-title">
+      </div>
+    </div>
+    <!-- scrolls independently of .education-header above, so the title
+         never drifts (see the .screen-scroll fix in styles.css) -->
+    <div class="screen-scroll">
+      <img src="assets/JackFrost.png" alt="" class="education-side-art" aria-hidden="true" onerror="this.remove()">
+      <div class="cv-viewer">
+        <img src="assets/CV.png" alt="Alex Morgan's CV" class="cv-image">
+      </div>
+      <a class="cv-btn" href="assets/cv/Alex_Morgan_CV.pdf" download="Alex_Morgan_CV.pdf">
+        <span>⬇ Download my CV (PDF)</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============== CONTACT SECTION ============== -->
+  <section id="contact" class="screen">
+    <div class="contact-panel">
+      <span class="project-tag project-tag--dark">05 Contacts</span>
+      <h2 class="display">LET'S BUILD SOMETHING WORTH SHIPPING.</h2>
+      <p>Open to full-time roles, contract work, and the occasional weird side project. Based in Manila, working across time zones.</p>
+    </div>
+
+    <div class="contact-list">
+      <a class="contact-chip" href="mailto:hello@alexmorgan.design"><span>Email ✉</span></a>
+      <a class="contact-chip" href="#" target="_blank" rel="noopener"><span>LinkedIn ↗</span></a>
+      <a class="contact-chip" href="#" target="_blank" rel="noopener"><span>Dribbble ↗</span></a>
+      <a class="contact-chip" href="#" target="_blank" rel="noopener"><span>GitHub ↗</span></a>
+      <a class="contact-chip" href="assets/cv/Alex_Morgan_CV.pdf" download="Alex_Morgan_CV.pdf"><span>CV ⬇</span></a>
+    </div>
+
+    <!-- Message form — relayed to your inbox via formsubmit.co.
+         NOTE: the first-ever submission emails you a one-time activation link. -->
+    <form id="contact-form" class="contact-form" novalidate>
+      <div class="form-head">Send me a message</div>
+      <label class="field">
+        <span>Name</span>
+        <input type="text" name="name" required maxlength="100" autocomplete="name">
+      </label>
+      <label class="field">
+        <span>Your email</span>
+        <input type="email" name="email" required maxlength="150" autocomplete="email">
+      </label>
+      <label class="field">
+        <span>Message</span>
+        <textarea name="message" required rows="5" maxlength="3000"></textarea>
+      </label>
+      <!-- honeypot: bots fill this, humans never see it -->
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off"
+             style="position:absolute;left:-5000px" aria-hidden="true">
+      <div class="form-foot">
+        <button type="submit" class="cv-btn form-send"><span>Send it ➤</span></button>
+        <div id="form-status" role="status"></div>
+      </div>
+    </form>
+
+    <footer>
+      <span>&copy; 2026 Alex Morgan. All rights reserved.</span>
+      <span>Built with intent, not templates.</span>
+    </footer>
+  </section>
+
+  <!-- ============== SCREEN WIPE TRANSITION ==============
+       Covers the screen with three diagonal panes whenever a
+       menu link is clicked; the target section swaps in while
+       covered, then the panes sweep off to reveal it. -->
+  <div id="wipe" aria-hidden="true">
+    <div class="pane p3"></div>
+    <div class="pane p2"></div>
+    <div class="pane p1"></div>
+  </div>
+
+  <!-- my own script, loaded at the end so the HTML is ready first -->
+  <script src="script.js"></script>
+
+</body>
+</html>
