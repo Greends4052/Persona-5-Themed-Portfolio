@@ -42,10 +42,22 @@
   <!-- ============== ABOUT SECTION ============== -->
   <section id="about" class="screen">
     <div class="about-slab" aria-hidden="true"></div>
-    <div class="confidant-stack">
-      <img src="assets/Steven.png" alt="Steven Punay, a counselor recently hired at Shujin Academy" class="confidant-layer confidant-steven">
-      <img src="assets/Rank.png" alt="Confidant rank details" class="confidant-layer confidant-rank">
-      <img src="assets/Councillor.png" alt="Councillor arcana tarot card" class="confidant-layer confidant-councillor">
+
+    <div class="section-header">
+      <div class="title-wrap">
+        <img src="assets/About_me.png" alt="About Me" class="section-title">
+      </div>
+    </div>
+
+    <!-- full-bleed, no padding — same title-lock fix as the other
+         sections, just without the generic .screen-scroll padding so
+         the Confidant art still runs edge-to-edge (see styles.css) -->
+    <div class="about-scroll">
+      <div class="confidant-stack">
+        <img src="assets/Steven.png" alt="Steven Punay, a counselor recently hired at Shujin Academy" class="confidant-layer confidant-steven">
+        <img src="assets/Rank.png" alt="Confidant rank details" class="confidant-layer confidant-rank">
+        <img src="assets/Councillor.png" alt="Councillor arcana tarot card" class="confidant-layer confidant-councillor">
+      </div>
     </div>
   </section>
 
@@ -65,9 +77,9 @@
       </svg>
     </div>
 
-    <div class="design-header">
-      <div class="design-title-wrap">
-        <img src="assets/Designs.png" alt="Designs" class="design-title">
+    <div class="section-header">
+      <div class="title-wrap">
+        <img src="assets/Designs.png" alt="Designs" class="section-title">
       </div>
     </div>
 
@@ -129,12 +141,12 @@
         <rect width="100%" height="100%" fill="url(#work-star-pattern)"></rect>
       </svg>
     </div>
-    <div class="project-header">
-      <div class="project-title-wrap">
-        <img src="assets/Projects.png" alt="Projects" class="project-title">
+    <div class="section-header">
+      <div class="title-wrap">
+        <img src="assets/Projects.png" alt="Projects" class="section-title">
       </div>
     </div>
-    <!-- scrolls independently of .project-header above, so the title
+    <!-- scrolls independently of .section-header above, so the title
          never drifts (see the .screen-scroll fix in styles.css) -->
     <div class="screen-scroll">
       <div class="project-grid">
@@ -153,19 +165,50 @@
        since that's an image asset — swap it whenever you have an
        "About" graphic. -->
   <section id="education" class="screen">
-    <div class="education-header">
-      <div class="education-title-wrap">
-        <img src="assets/Education.png" alt="About" class="education-title">
+    <!-- diagonal two-tone wash: red under the CV box, grey under JackFrost -->
+    <div class="education-bg" aria-hidden="true">
+      <!-- left/red half: tiled star field, same technique as the Projects background -->
+      <div class="education-bg-red">
+        <svg class="edu-tiles" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="education-star-pattern" width="200" height="200" patternUnits="userSpaceOnUse">
+              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
+                       fill="#e60012" opacity="0.55" transform="translate(10,10) scale(0.9)"></polygon>
+              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
+                       fill="#ff4d5a" opacity="0.3" transform="translate(115,55) scale(0.55) rotate(25 50 50)"></polygon>
+              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
+                       fill="#8a0009" opacity="0.5" transform="translate(55,130) scale(0.7) rotate(-18 50 50)"></polygon>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#education-star-pattern)"></rect>
+        </svg>
+      </div>
+      <!-- right/grey half: moving dot texture, plus the same two rotating
+           star outlines used behind the Designs section phone scene, so
+           JackFrost sits on a matching backdrop -->
+      <div class="education-bg-grey">
+        <svg class="bg-star" style="left:8%;top:10%;width:24vmax;height:24vmax" viewBox="0 0 100 100">
+          <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#000"/>
+        </svg>
+        <svg class="bg-star s2" style="right:6%;bottom:8%;width:30vmax;height:30vmax" viewBox="0 0 100 100">
+          <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#fff"/>
+        </svg>
       </div>
     </div>
-    <!-- scrolls independently of .education-header above, so the title
+
+    <div class="section-header">
+      <div class="title-wrap">
+        <img src="assets/Education.png" alt="About" class="section-title">
+      </div>
+    </div>
+    <!-- scrolls independently of .section-header above, so the title
          never drifts (see the .screen-scroll fix in styles.css) -->
     <div class="screen-scroll">
       <img src="assets/JackFrost.png" alt="" class="education-side-art" aria-hidden="true" onerror="this.remove()">
       <div class="cv-viewer">
-        <img src="assets/CV.png" alt="Alex Morgan's CV" class="cv-image">
+        <img src="assets/CV.png" alt="Steven Punay's CV" class="cv-image">
       </div>
-      <a class="cv-btn" href="assets/cv/Alex_Morgan_CV.pdf" download="Alex_Morgan_CV.pdf">
+      <a class="cv-btn" href="assets/cv/Steven_Punay_CV.pdf" download="Steven_Punay_CV.pdf">
         <span>⬇ Download my CV (PDF)</span>
       </a>
     </div>
@@ -180,11 +223,11 @@
     </div>
 
     <div class="contact-list">
-      <a class="contact-chip" href="mailto:hello@alexmorgan.design"><span>Email ✉</span></a>
+      <a class="contact-chip" href="mailto:hello@stevenpunay.design"><span>Email ✉</span></a>
       <a class="contact-chip" href="#" target="_blank" rel="noopener"><span>LinkedIn ↗</span></a>
       <a class="contact-chip" href="#" target="_blank" rel="noopener"><span>Dribbble ↗</span></a>
       <a class="contact-chip" href="#" target="_blank" rel="noopener"><span>GitHub ↗</span></a>
-      <a class="contact-chip" href="assets/cv/Alex_Morgan_CV.pdf" download="Alex_Morgan_CV.pdf"><span>CV ⬇</span></a>
+      <a class="contact-chip" href="assets/cv/Steven_Punay_CV.pdf" download="Steven_Punay_CV.pdf"><span>CV ⬇</span></a>
     </div>
 
     <!-- Message form — relayed to your inbox via formsubmit.co.
@@ -213,7 +256,7 @@
     </form>
 
     <footer>
-      <span>&copy; 2026 Alex Morgan. All rights reserved.</span>
+      <span>&copy; 2026 Steven Punay. All rights reserved.</span>
       <span>Built with intent, not templates.</span>
     </footer>
   </section>

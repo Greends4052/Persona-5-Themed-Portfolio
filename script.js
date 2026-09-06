@@ -140,7 +140,7 @@
   var form = document.getElementById('contact-form');
   if (!form) return;
 
-  var CONTACT_EMAIL = 'hello@alexmorgan.design';
+  var CONTACT_EMAIL = 'hello@stevenpunay.design';
   var status = document.getElementById('form-status');
   var btn = form.querySelector('.form-send');
 
