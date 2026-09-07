@@ -521,84 +521,31 @@ section {
   contain: paint;
 }
 
-/* The three PNGs are positioned explicitly rather than assumed to share
-   one canvas: Steven sits on the left (flush with the section's bottom
-   edge since #about has no bottom padding), Rank sits top-right, and
-   Councillor sits on the left, overlapping Rank's left edge. */
+/* Used to be three separately-positioned PNGs (Steven, Rank,
+   Councillor) layered on top of each other; now it's a single
+   pre-composed image. */
 .confidant-stack {
   position: relative;
   z-index: 1;
   width: 100%;
-  aspect-ratio: 16 / 9;
   margin-top: 0;
 }
 
-.confidant-layer {
-  position: absolute;
+.confidant-img {
   display: block;
-  height: auto;
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+  position: relative;
+  top: -75px;
+  left: 0;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.confidant-steven {
-  bottom: 26%;
-  width: 80%;
-  transform-origin: bottom center;
-}
-
-@keyframes steven-wobble {
-  0%, 100% { transform: rotate(0deg); }
-  20% { transform: rotate(-5deg); }
-  40% { transform: rotate(4deg); }
-  60% { transform: rotate(-3deg); }
-  80% { transform: rotate(2deg); }
-}
-
-.confidant-steven:hover {
-  animation: steven-wobble 0.6s ease-in-out;
-  cursor: pointer;
-}
-
-.confidant-rank {
-  top: -10%;
-  right: 0;
-  width: 50%;
-  z-index: 2;
-}
-
-.confidant-councillor {
-  top: 4%;
-  left: 52.5%;
-  width: 13%;
-  z-index: 3;
-  cursor: pointer;
-  transform: rotate(-21deg);
-  transform-origin: center;
-  transition: transform 0.25s cubic-bezier(.2, .8, .2, 1);
-}
-
-.confidant-councillor:hover,
-.confidant-councillor:focus-visible {
-  transform: rotate(-6deg) scale(1.18);
-}
-
-/* on small screens the overlapping absolute layout gets cramped,
-   so stack the three pieces vertically instead (Steven still last/bottom) */
-@media (max-width: 700px) {
-  .confidant-stack {
-    aspect-ratio: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  .confidant-layer {
-    position: static;
-    width: 85%;
-    transform: none !important;
-  }
-  .confidant-rank { order: 1; }
-  .confidant-councillor { order: 2; }
-  .confidant-steven { order: 3; }
+.confidant-img:hover {
+  transform: scale(1.02) rotate(-1deg);
+  filter: drop-shadow(6px 6px 0 var(--red));
 }
 
 /* Designs is now a phone-call scene: a ringing Phone.png centered on a
