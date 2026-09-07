@@ -1,11 +1,11 @@
 // ===================================================
 // Designs section: a ringing Phone.png sits center-stage.
 // Answering it slides Line.png up (same pulled-from-pocket
-// motion as before), revealing 8 Metanav app icons on it.
-// Tapping an app fades in that project's preview and shows
-// a Back button; Back returns to the 8-icon view. Leaving
-// the Designs screen and coming back resets it so the phone
-// rings again on the next visit.
+// motion as before), revealing 9 Metanav app icons on it.
+// Tapping an app fades in that project's preview. The only
+// way back to the app grid is Esc — there's no on-screen
+// Back button. Leaving the Designs screen and coming back
+// resets it so the phone rings again on the next visit.
 // Swap the placeholder text/images in `projectPlaceholders`
 // below for real project content whenever it's ready.
 // ===================================================
@@ -16,7 +16,6 @@
   var metanavGrid = document.getElementById('metanav-grid');
   var metanavButtons = document.querySelectorAll('.metanav-btn');
   var lineContent = document.getElementById('line-content');
-  var backBtn = document.getElementById('designs-back-btn');
   var escHint = document.getElementById('esc-hint');
 
   if (!phoneShowcase || !phoneBtn || !linePanel || !metanavGrid || !lineContent || metanavButtons.length === 0) return;
@@ -87,19 +86,17 @@
     }
 
     metanavGrid.classList.add('is-hidden');
-    if (backBtn) backBtn.classList.add('is-visible');
-    // the dedicated Back.png button above already returns to the app
-    // grid, so hide the global back-to-top button while a preview is
-    // open — having both on screen at once was confusing
+    // there's no on-screen Back button anymore — Esc is the only way
+    // back to the app grid — so keep the global back-to-top button
+    // hidden while a preview is open, same as before
     document.body.classList.add('preview-open');
     scheduleEscHint();
   }
 
-  // Back button: close the preview, return to the 8 apps
+  // Esc-driven: close the preview, return to the 9 apps
   function backToApps() {
     lineContent.classList.remove('is-visible');
     metanavGrid.classList.remove('is-hidden');
-    if (backBtn) backBtn.classList.remove('is-visible');
     document.body.classList.remove('preview-open');
     hideEscHint();
   }
@@ -111,7 +108,6 @@
     lineContent.classList.remove('is-visible');
     lineContent.innerHTML = '';
     metanavGrid.classList.remove('is-hidden');
-    if (backBtn) backBtn.classList.remove('is-visible');
     document.body.classList.remove('preview-open');
     hideEscHint();
   }
@@ -128,8 +124,6 @@
       openAppFor(Number(btn.dataset.index));
     });
   });
-
-  if (backBtn) backBtn.addEventListener('click', backToApps);
 
   // Esc key inside the Designs scene has three levels:
   //  - a design preview is open  -> back to the 8 apps
@@ -158,6 +152,47 @@
   document.querySelectorAll('a[href="#designs"]').forEach(function (link) {
     link.addEventListener('click', resetDesignsScene);
   });
+})();
+
+
+// ===================================================
+// Contact section: CallingCard1.png sits center-stage until
+// clicked; clicking it reveals the Dialogue box, social icons,
+// and message form below it. Resets every time this screen is
+// (re)entered so the card's pop-in animation plays fresh again.
+// ===================================================
+(function () {
+  var showcase = document.getElementById('calling-card-showcase');
+  var cardBtn = document.getElementById('calling-card-btn');
+  var reveal = document.getElementById('contact-reveal');
+
+  if (!showcase || !cardBtn || !reveal) return;
+
+  function openReveal() {
+    showcase.classList.add('is-open');
+    reveal.classList.add('is-visible');
+  }
+
+  // back to the unanswered card, as if a fresh visit — also restarts
+  // the pop-in animation even on rapid re-visits
+  function resetCallingCard() {
+    showcase.classList.remove('is-open');
+    reveal.classList.remove('is-visible');
+    cardBtn.classList.remove('is-entering');
+    void cardBtn.offsetWidth; // force a reflow so the animation replays
+    cardBtn.classList.add('is-entering');
+  }
+
+  cardBtn.addEventListener('click', openReveal);
+
+  // play the entrance animation fresh every time Contact is opened
+  document.querySelectorAll('a[href="#contact"]').forEach(function (link) {
+    link.addEventListener('click', resetCallingCard);
+  });
+
+  // and once on load, in case the page is ever loaded straight into
+  // the Contact screen (e.g. a deep link)
+  resetCallingCard();
 })();
 
 

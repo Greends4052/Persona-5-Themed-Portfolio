@@ -111,11 +111,6 @@
 
           <div class="line-content" id="line-content"></div>
 
-          <!-- Back button: only visible once a design preview is open -->
-          <button class="back-btn" id="designs-back-btn" type="button" aria-label="Back to apps">
-            <img src="assets/Back.png" alt="" class="back-btn-img">
-          </button>
-
           <!-- Esc hint: fades in ~1s after a design preview opens, sitting
                to the left of Line.png, as a quiet reminder that Esc (or
                the Back button) returns to the app grid -->
@@ -220,58 +215,62 @@
       </div>
     </div>
 
-    <div class="contact-panel">
-      <!-- Dialogue.png replaces the old red box; size/position are
-           controlled entirely by the --dialogue-* variables on
-           .dialogue-bg in styles.css — no markup changes needed
-           to resize or reposition it. -->
-      <img src="assets/Dialogue.png" alt="" class="dialogue-bg" aria-hidden="true">
-    </div>
+    <!-- CallingCard1.png sits center-stage until clicked; everything
+         below (Dialogue box, social icons, message form) is hidden
+         until then. Resets on every fresh visit to this screen so the
+         card's pop-in animation plays again — see script.js. -->
+    <div class="calling-card-showcase" id="calling-card-showcase">
+      <button class="calling-card-btn" id="calling-card-btn" type="button" aria-label="Open the contact form">
+        <img src="assets/CallingCard1.png" alt="" class="calling-card-img">
+      </button>
 
-    <div class="contact-list">
-      <a class="contact-chip" href="mailto:punay.stevenkenn.bscs2025@gmail.com" aria-label="Email">
-        <img src="assets/Email.png" alt="" class="contact-chip-img">
-      </a>
-      <a class="contact-chip" href="https://www.facebook.com/stevn.not/" target="_blank" rel="noopener" aria-label="Facebook">
-        <img src="assets/Facebook.png" alt="" class="contact-chip-img">
-      </a>
-      <a class="contact-chip" href="https://www.instagram.com/stvn_not/?hl=en" target="_blank" rel="noopener" aria-label="Instagram">
-        <img src="assets/Insta.png" alt="" class="contact-chip-img">
-      </a>
-      <a class="contact-chip" href="https://github.com/Greends4052" target="_blank" rel="noopener" aria-label="GitHub">
-        <img src="assets/Git.png" alt="" class="contact-chip-img">
-      </a>
-      <a class="contact-chip" href="assets/Files/Steven_Punay_CV.pdf" download="Steven_Punay_CV.pdf" aria-label="Download CV">
-        <img src="assets/CVpic.png" alt="" class="contact-chip-img">
-      </a>
-    </div>
+      <div class="contact-reveal" id="contact-reveal">
+        <div class="contact-list">
+          <a class="contact-chip" href="mailto:punay.stevenkenn.bscs2025@gmail.com" aria-label="Email">
+            <img src="assets/Email.png" alt="" class="contact-chip-img">
+          </a>
+          <a class="contact-chip" href="https://www.facebook.com/stevn.not/" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="assets/Facebook.png" alt="" class="contact-chip-img">
+          </a>
+          <a class="contact-chip" href="https://www.instagram.com/stvn_not/?hl=en" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="assets/Insta.png" alt="" class="contact-chip-img">
+          </a>
+          <a class="contact-chip" href="https://github.com/Greends4052" target="_blank" rel="noopener" aria-label="GitHub">
+            <img src="assets/Git.png" alt="" class="contact-chip-img">
+          </a>
+          <a class="contact-chip" href="assets/Files/Steven_Punay_CV.pdf" download="Steven_Punay_CV.pdf" aria-label="Download CV">
+            <img src="assets/CVpic.png" alt="" class="contact-chip-img">
+          </a>
+        </div>
 
-    <!-- Message form — relayed to your inbox via formsubmit.co.
-         NOTE: the first-ever submission emails you a one-time activation link. -->
-    <form id="contact-form" class="contact-form" novalidate>
-      <img src="assets/Send.png" alt="Send me a message" class="form-head-img">
-      <label class="field">
-        <img src="assets/Name.png" alt="Name" class="field-label-img">
-        <input type="text" name="name" required maxlength="100" autocomplete="name">
-      </label>
-      <label class="field">
-        <img src="assets/SendEmail.png" alt="Your email" class="field-label-img">
-        <input type="email" name="email" required maxlength="150" autocomplete="email">
-      </label>
-      <label class="field">
-        <img src="assets/Message.png" alt="Message" class="field-label-img">
-        <textarea name="message" required rows="5" maxlength="3000"></textarea>
-      </label>
-      <!-- honeypot: bots fill this, humans never see it -->
-      <input type="text" name="_honey" tabindex="-1" autocomplete="off"
-             style="position:absolute;left:-5000px" aria-hidden="true">
-      <div class="form-foot">
-        <button type="submit" class="form-send" aria-label="Send it">
-          <img src="assets/Sent.png" alt="" class="form-send-img">
-        </button>
-        <div id="form-status" role="status"></div>
+        <!-- Message form — relayed to your inbox via formsubmit.co.
+             NOTE: the first-ever submission emails you a one-time activation link. -->
+        <form id="contact-form" class="contact-form" novalidate>
+          <img src="assets/Send.png" alt="Send me a message" class="form-head-img">
+          <label class="field">
+            <img src="assets/Name.png" alt="Name" class="field-label-img">
+            <input type="text" name="name" required maxlength="100" autocomplete="name">
+          </label>
+          <label class="field">
+            <img src="assets/SendEmail.png" alt="Your email" class="field-label-img">
+            <input type="email" name="email" required maxlength="150" autocomplete="email">
+          </label>
+          <label class="field">
+            <img src="assets/Message.png" alt="Message" class="field-label-img">
+            <textarea name="message" required rows="5" maxlength="3000"></textarea>
+          </label>
+          <!-- honeypot: bots fill this, humans never see it -->
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off"
+                 style="position:absolute;left:-5000px" aria-hidden="true">
+          <div class="form-foot">
+            <button type="submit" class="form-send" aria-label="Send it">
+              <img src="assets/Sent.png" alt="" class="form-send-img">
+            </button>
+            <div id="form-status" role="status"></div>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
 
     <footer>
       <span>&copy; 2026 Steven Punay. All rights reserved.</span>

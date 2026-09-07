@@ -179,30 +179,37 @@ a {
   opacity: 0.7;
 }
 
-/* thin diagonal stripes drawn on top of the photo, just decoration.
-   Drifts continuously so the background never reads as a static image —
-   reused by every section's stripe layer (about/designs/work below). */
+/* PERFORMANCE FIX #2: animating background-position forces the browser
+   to repaint the whole layer on every frame, no matter how it's timed.
+   transform, on the other hand, can be handled entirely by the GPU
+   compositor with zero repainting. Translating the *whole* oversized
+   layer by the same (300px, 150px) produces the exact same visual
+   drift as shifting the background used to — just far cheaper. Used
+   on hero/about/contact's stripe layers below.
+   #work::after keeps the old background-position version instead,
+   since #work::after already has its own mouse-parallax `transform`
+   (see the shared parallax rule above) — animating transform there
+   too would fight that rule and cancel the parallax drift out. */
 @keyframes stripe-drift {
   from { background-position: 0 0; }
   to   { background-position: 300px 150px; }
 }
 
-/* PERFORMANCE FIX: animating background-position forces the browser to
-   repaint the whole (viewport-sized) layer on every single frame — and
-   this pattern is reused on 3 different full-screen layers (hero, about,
-   work). That's the main source of the lag. Using steps() instead of the
-   default smooth "linear" easing makes it repaint ~15x/sec instead of
-   ~60x/sec — still reads as a drifting texture, at a quarter of the cost. */
+@keyframes stripe-drift-transform {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(300px, 150px, 0); }
+}
 .hero-slab::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: -350px;
+  left: -350px;
+  right: -350px;
+  bottom: -350px;
   background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
-  animation: stripe-drift 14s steps(24) infinite;
-  contain: strict;
+  animation: stripe-drift-transform 10s linear infinite;
+  will-change: transform;
+  contain: paint;
 }
 
 .hero-content {
@@ -504,10 +511,14 @@ section {
 .about-slab::after {
   content: "";
   position: absolute;
-  inset: 0;
+  top: -350px;
+  left: -350px;
+  right: -350px;
+  bottom: -350px;
   background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
-  animation: stripe-drift 14s steps(24) infinite;
-  contain: strict;
+  animation: stripe-drift-transform 14s steps(24) infinite;
+  will-change: transform;
+  contain: paint;
 }
 
 /* The three PNGs are positioned explicitly rather than assumed to share
@@ -529,7 +540,7 @@ section {
 }
 
 .confidant-steven {
-  bottom: 13%;
+  bottom: 26%;
   width: 80%;
   transform-origin: bottom center;
 }
@@ -548,14 +559,14 @@ section {
 }
 
 .confidant-rank {
-  top: 0;
+  top: -10%;
   right: 0;
   width: 50%;
   z-index: 2;
 }
 
 .confidant-councillor {
-  top: 14%;
+  top: 4%;
   left: 52.5%;
   width: 13%;
   z-index: 3;
@@ -642,9 +653,9 @@ section {
    DESIGNS SECTION: TITLE / PHONE / LINE / METANAV
    Phone.png rings center-stage. Answering it slides Line.png
    up from the bottom (same pulled-from-pocket motion as
-   before) with 8 Metanav app icons laid across it. Clicking
-   an app reveals a placeholder preview plus a Back.png button
-   that returns to the 8-icon view.
+   before) with 9 Metanav app icons laid across it. Clicking
+   an app reveals a placeholder preview; Esc is the only way
+   back to the icon view (see script.js).
    =================================================== */
 .phone-showcase {
   position: relative;
@@ -825,43 +836,6 @@ section {
 .line-content-img[data-index="7"] { top: 14%; left: 28%; width: 60%; }
 .line-content-img[data-index="8"] { top: 14%; left: 28%; width: 60%; }
 
-/* -------- Back button: returns from a design preview to the 8 apps -------- */
-.back-btn {
-  position: absolute;
-  top: -10%;
-  left: -8%;
-  width: 15%;
-  min-width: 46px;
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  z-index: 3;
-  opacity: 0;
-  transform: scale(0.85);
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.back-btn.is-visible {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
-}
-
-.back-btn-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.5));
-  transition: transform 0.2s ease;
-}
-
-.back-btn:hover .back-btn-img,
-.back-btn:focus-visible .back-btn-img {
-  transform: scale(1.1);
-}
-
 /* -------- Esc hint: quiet "how to go back" reminder --------
    Sits just outside the left edge of Line.png. Hidden by default;
    script.js adds .is-visible about 1s after a design preview opens,
@@ -896,11 +870,6 @@ section {
   }
   .section-title {
     width: clamp(130px, 34vw, 200px);
-  }
-  .back-btn {
-    top: -6%;
-    left: -4%;
-    width: 20%;
   }
   /* not enough room to the left on narrow screens — sit it above instead */
   .esc-hint {
@@ -1023,10 +992,6 @@ section {
     gap: 1.2rem;
   }
 
-  .contact-panel {
-    padding: 1rem 1.25rem 0.5rem;
-  }
-
   .contact-form {
     max-width: 100%;
   }
@@ -1126,12 +1091,16 @@ section {
 #work::after {
   content: "";
   position: fixed;
-  inset: -30px;
+  top: -350px;
+  left: -350px;
+  right: -350px;
+  bottom: -350px;
   background: repeating-linear-gradient(115deg, rgba(230, 0, 18, 0.05) 0px, rgba(230, 0, 18, 0.05) 2px, transparent 2px, transparent 16px);
   animation: stripe-drift 14s steps(24) infinite;
   z-index: 0;
   pointer-events: none;
-  contain: strict;
+  will-change: transform;
+  contain: paint;
 }
 
 #work .project-grid {
@@ -1266,50 +1235,112 @@ section {
 .contact-slab::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: -350px;
+  left: -350px;
+  right: -350px;
+  bottom: -350px;
   background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
-  animation: stripe-drift 14s steps(24) infinite;
-  contain: strict;
+  animation: stripe-drift-transform 10s linear infinite;
+  will-change: transform;
+  contain: paint;
 }
 
-.contact-panel {
+/* -------- CallingCard1.png reveal --------
+   Same "answer to reveal" idea as the Designs phone: the card sits
+   center-stage until clicked, then the whole contact panel (Dialogue
+   box, social icons, message form) fades/slides in below it. Resets
+   every time this screen is (re)entered — see script.js — so the
+   card's pop-in animation plays fresh on each visit. */
+.calling-card-showcase {
   position: relative;
-  z-index: 1;
-  /* trimmed from 5rem so the dialogue image (and everything below it)
-     sits closer to the title instead of floating in empty space */
-  padding: 1.5rem clamp(1.5rem, 6vw, 5rem) 0.5rem;
+  min-height: 52vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* -------- Dialogue.png --------
-   The panel's only content now, so it stays in normal flow (its own
-   height defines the panel's height instead of collapsing to zero).
-   Tweak these three variables to resize/reposition it — nothing
-   else needs to change:
-     --dialogue-width       : how big the image renders
-     --dialogue-margin-top  : nudges it down (or up, with a negative value)
-     --dialogue-margin-left : nudges it right (or left, with a negative value)
-   Any CSS length works (%, px, rem, vw, etc). */
-.dialogue-bg {
-  --dialogue-width: 130%;
-  --dialogue-margin-top: -55px;
-  --dialogue-margin-left: -130px;
-
+.calling-card-showcase.is-open {
   display: block;
-  width: var(--dialogue-width);
+  min-height: 0;
+}
+
+.calling-card-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  width: clamp(210px, 34vw, 380px);
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+/* hover/focus lives on the button (parent) so it composes cleanly with
+   the ring animation running on .calling-card-img (child) below,
+   instead of both fighting over the same transform property */
+.calling-card-btn:hover,
+.calling-card-btn:focus-visible {
+  transform: scale(1.08) translateY(-4px);
+}
+
+.calling-card-showcase.is-open .calling-card-btn {
+  display: none;
+}
+
+.calling-card-img {
+  display: block;
+  width: 100%;
   height: auto;
-  margin-top: var(--dialogue-margin-top);
-  margin-left: var(--dialogue-margin-left);
-  pointer-events: none;
-  user-select: none;
+  filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.5));
+  transition: filter 0.25s ease;
+}
+
+.calling-card-btn:hover .calling-card-img,
+.calling-card-btn:focus-visible .calling-card-img {
+  filter: drop-shadow(6px 9px 0 rgba(0, 0, 0, 0.55));
+}
+
+@keyframes card-pop-in {
+  0%   { opacity: 0; transform: scale(0.6) rotate(-10deg); }
+  70%  { opacity: 1; transform: scale(1.06) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* same wobble as the Designs phone's ring, just renamed for this
+   context — starts right as the pop-in finishes (matching delay) and
+   loops until the card is clicked */
+@keyframes card-ring {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(-8deg); }
+  20% { transform: rotate(7deg); }
+  30% { transform: rotate(-6deg); }
+  40% { transform: rotate(5deg); }
+  50% { transform: rotate(-3deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+.calling-card-btn.is-entering .calling-card-img {
+  animation:
+    card-pop-in 0.55s cubic-bezier(.34, 1.56, .64, 1) both,
+    card-ring 1.1s ease-in-out 0.55s infinite;
+}
+
+.contact-reveal {
+  display: none;
+}
+
+.contact-reveal.is-visible {
+  display: block;
+  animation: reveal-fade-in 0.5s ease both;
+}
+
+@keyframes reveal-fade-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .contact-list {
-  /* trimmed down from clamp(3.5rem, 8vw, 6rem) to bring the icons
-     closer to Dialogue.png — still enough gap that it won't touch it */
-  margin-top: clamp(1.25rem, 3vw, 2rem);
+  /* now the first thing inside .contact-reveal, so this just gives it
+     a little breathing room below the calling card / section title */
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
@@ -1462,6 +1493,7 @@ footer {
   }
   .hero-slab::after,
   .about-slab::after,
+  .contact-slab::after,
   .bg-star,
   .work-bg svg,
   .edu-tiles,
@@ -1470,6 +1502,12 @@ footer {
   }
   .phone-img {
     animation: none;
+  }
+  .calling-card-btn.is-entering .calling-card-img,
+  .contact-reveal.is-visible {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
   .project-card,
   .project-img,
@@ -1500,9 +1538,9 @@ footer {
   pointer-events: auto;
 }
 
-/* hidden while a Designs preview is open — the dedicated Back.png
-   button already returns to the app grid, so showing both was
-   confusing (see script.js, .preview-open) */
+/* hidden while a Designs preview is open — Esc is the only way back,
+   and showing this button too made it look like there were two
+   different ways back (see script.js, .preview-open) */
 body.preview-open .back-to-top {
   opacity: 0;
   pointer-events: none;
@@ -1569,14 +1607,14 @@ body.preview-open .back-to-top {
    outline box around Phone.png / a Metanav icon after the click */
 .phone-btn:focus,
 .metanav-btn:focus,
-.back-btn:focus,
+.calling-card-btn:focus,
 .back-to-top:focus {
   outline: none;
 }
 
 .phone-btn:focus-visible,
 .metanav-btn:focus-visible,
-.back-btn:focus-visible {
+.calling-card-btn:focus-visible {
   outline: 2px solid var(--red);
   outline-offset: 4px;
 }
