@@ -459,6 +459,7 @@ section {
    comes after it. */
 .section-header {
   position: relative;
+  z-index: 1;
   margin-bottom: 2.5rem;
 }
 
@@ -1192,6 +1193,40 @@ section {
   contain: paint;
 }
 
+/* -------- Jack.png: big decorative overlay, left side --------
+   Same treatment as .education-side-art (JackFrost.png), mirrored to
+   the left edge instead of the right: sized taller than the viewport
+   and pushed partly off-screen on purpose, capped so it can't eat into
+   the reveal content on the right, hidden below a width where there
+   isn't room for both. Stays invisible until the calling card has
+   actually been clicked open — the sibling selector below is why this
+   element lives right after .calling-card-showcase in the markup. */
+.contact-side-art {
+  position: absolute;
+  top: 80%;
+  left: 5%;
+  transform: translateY(-50%);
+  height: 148vh;
+  width: auto;
+  max-width: 44vw;
+  z-index: 0;
+  pointer-events: none;
+  object-fit: contain;
+  filter: drop-shadow(-10px 10px 0 rgba(0, 0, 0, 0.4));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.calling-card-showcase.is-open ~ .contact-side-art {
+  opacity: 1;
+}
+
+@media (max-width: 1150px) {
+  .contact-side-art {
+    display: none;
+  }
+}
+
 /* -------- CallingCard1.png reveal --------
    Same "answer to reveal" idea as the Designs phone: the card sits
    center-stage until clicked, then the whole contact panel (Dialogue
@@ -1200,14 +1235,19 @@ section {
    card's pop-in animation plays fresh on each visit. */
 .calling-card-showcase {
   position: relative;
+  z-index: 1;
   min-height: 52vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* once opened, the reveal content (icons + form) sits on the RIGHT
+   side of the section, leaving Jack.png visible on the left */
 .calling-card-showcase.is-open {
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
   min-height: 0;
 }
 
@@ -1272,6 +1312,8 @@ section {
 
 .contact-reveal {
   display: none;
+  width: 100%;
+  max-width: 620px;
 }
 
 .contact-reveal.is-visible {
@@ -1422,6 +1464,8 @@ section {
    FOOTER
    =================================================== */
 footer {
+  position: relative;
+  z-index: 1;
   padding: 2rem clamp(1.25rem, 6vw, 6rem);
   display: flex;
   justify-content: space-between;
