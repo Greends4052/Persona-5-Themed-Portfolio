@@ -2,26 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Steven Punay — Portfolio</title>
 
-  <!-- fonts from Google Fonts -->
+  <!-- Google Fonts (Optimized to active fonts only) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Arsenal:ital,wght@0,400;0,700;1,400&family=Jost:wght@400;500;600;700&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
 
-  <!-- my own stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ============== BACK TO MAIN MENU ==============
-       Fixed button, always on screen, jumps back to the
-       hero section where the command-stack menu lives. -->
+  <!-- BACK TO MAIN MENU -->
   <a href="#top" class="back-to-top nav-link" aria-label="Back to main menu">
     <img src="assets/back.png" alt="">
   </a>
 
-  <!-- ============== HERO SECTION ============== -->
+  <!-- HERO SECTION -->
   <section class="hero screen active" id="top">
     <div class="hero-slab" aria-hidden="true"></div>
     <div class="hero-inner">
@@ -39,32 +36,23 @@
     </div>
   </section>
 
-  <!-- ============== ABOUT SECTION ============== -->
+  <!-- ABOUT SECTION -->
   <section id="about" class="screen">
     <div class="about-slab" aria-hidden="true"></div>
-
-    <!-- title now lives inside the scrolling wrapper so it scrolls
-         away with the content instead of staying pinned in place -->
     <div class="about-scroll">
       <div class="section-header">
         <div class="title-wrap">
           <img src="assets/About_me.png" alt="About Me" class="section-title">
         </div>
       </div>
-
       <div class="confidant-stack">
         <img src="assets/Confidant.png" alt="Confidant" class="confidant-img">
       </div>
     </div>
   </section>
 
-  <!-- ============== DESIGNS SECTION ==============
-       A phone rings center-stage; answering it slides Line.png
-       up with 9 Metanav app icons on it, like unlocking a phone
-       to a home screen. Picking an app reveals that project's
-       preview plus a Back button that returns to the 9 apps. -->
+  <!-- DESIGNS SECTION -->
   <section id="designs" class="screen">
-    <!-- rotating star backdrop, same treatment as the reference site -->
     <div class="designs-bg" aria-hidden="true">
       <svg class="bg-star" style="left:6%;top:8%;width:26vmax;height:26vmax" viewBox="0 0 100 100">
         <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#000"/>
@@ -74,8 +62,6 @@
       </svg>
     </div>
 
-    <!-- title now lives inside .screen-scroll so it scrolls away
-         with the content instead of staying pinned in place -->
     <div class="screen-scroll">
       <div class="section-header">
         <div class="title-wrap">
@@ -84,17 +70,13 @@
       </div>
 
       <div class="phone-showcase" id="phone-showcase">
-        <!-- Phone.png: rings until answered -->
         <button class="phone-btn" id="phone-btn" type="button" aria-label="Answer the call to view designs">
           <img src="assets/Phone.png" alt="" class="phone-img">
         </button>
 
-        <!-- Line.png panel: hidden until the phone is answered, then slides
-             up like pulling your phone out of your pocket -->
         <div class="line-panel" id="line-panel">
           <img src="assets/Line.png" alt="" class="line-img">
 
-          <!-- 9 Metanav app icons, same angle/style as before, multiplied to 9 -->
           <div class="metanav-grid" id="metanav-grid">
             <button class="metanav-btn" type="button" data-index="0" aria-label="Design 1"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
             <button class="metanav-btn" type="button" data-index="1" aria-label="Design 2"><img src="assets/Metanav.png" alt="" class="metanav-img"></button>
@@ -108,37 +90,27 @@
           </div>
 
           <div class="line-content" id="line-content"></div>
-
-          <!-- Esc hint: fades in ~1s after a design preview opens, sitting
-               to the left of Line.png, as a quiet reminder that Esc (or
-               the Back button) returns to the app grid -->
           <img src="assets/Esc.png" alt="Press Esc to go back" class="esc-hint" id="esc-hint" aria-hidden="true">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============== PROJECTS SECTION ============== -->
+  <!-- PROJECTS SECTION -->
   <section id="work" class="screen">
-    <!-- tiled star field, built with inline SVG instead of an image file —
-         grayscale to match the section's charcoal palette -->
     <div class="work-bg" aria-hidden="true">
       <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
         <defs>
           <pattern id="work-star-pattern" width="200" height="200" patternUnits="userSpaceOnUse">
-            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
-                     fill="#3a3a3a" opacity="0.6" transform="translate(10,10) scale(0.9)"></polygon>
-            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
-                     fill="#5a5a5a" opacity="0.35" transform="translate(115,55) scale(0.55) rotate(25 50 50)"></polygon>
-            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
-                     fill="#151515" opacity="0.5" transform="translate(55,130) scale(0.7) rotate(-18 50 50)"></polygon>
+            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#3a3a3a" opacity="0.6" transform="translate(10,10) scale(0.9)"></polygon>
+            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#5a5a5a" opacity="0.35" transform="translate(115,55) scale(0.55) rotate(25 50 50)"></polygon>
+            <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#151515" opacity="0.5" transform="translate(55,130) scale(0.7) rotate(-18 50 50)"></polygon>
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#work-star-pattern)"></rect>
       </svg>
     </div>
-    <!-- title now lives inside .screen-scroll so it scrolls away
-         with the content instead of staying pinned in place -->
+
     <div class="screen-scroll">
       <div class="section-header">
         <div class="title-wrap">
@@ -154,38 +126,24 @@
     </div>
   </section>
 
-  <!-- ============== ABOUT / CV SECTION ==============
-       Was the education timeline / bio section. The bio copy and
-       photo are gone entirely now — the section just displays
-       CV.png inside the box, plus a download link underneath.
-       The nav icon still reads "Education" (assets/Education.png)
-       since that's an image asset — swap it whenever you have an
-       "About" graphic. -->
+  <!-- EDUCATION / CV SECTION -->
   <section id="education" class="screen">
-    <!-- diagonal two-tone wash: red under the CV box, grey under JackFrost -->
     <div class="education-bg" aria-hidden="true">
-      <!-- left/red half: tiled star field, same technique as the Projects background -->
       <div class="education-bg-red">
         <svg class="edu-tiles" preserveAspectRatio="xMidYMid slice">
           <defs>
             <pattern id="education-star-pattern" width="200" height="200" patternUnits="userSpaceOnUse">
-              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
-                       fill="#e60012" opacity="0.55" transform="translate(10,10) scale(0.9)"></polygon>
-              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
-                       fill="#ff4d5a" opacity="0.3" transform="translate(115,55) scale(0.55) rotate(25 50 50)"></polygon>
-              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35"
-                       fill="#8a0009" opacity="0.5" transform="translate(55,130) scale(0.7) rotate(-18 50 50)"></polygon>
+              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#e60012" opacity="0.55" transform="translate(10,10) scale(0.9)"></polygon>
+              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#ff4d5a" opacity="0.3" transform="translate(115,55) scale(0.55) rotate(25 50 50)"></polygon>
+              <polygon points="50,0 60,35 98,35 68,57 78,94 50,72 22,94 32,57 2,35 40,35" fill="#8a0009" opacity="0.5" transform="translate(55,130) scale(0.7) rotate(-18 50 50)"></polygon>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#education-star-pattern)"></rect>
         </svg>
       </div>
-      <!-- right/grey half: moving dot texture behind JackFrost -->
       <div class="education-bg-grey"></div>
     </div>
 
-    <!-- title now lives inside .screen-scroll so it scrolls away
-         with the content instead of staying pinned in place -->
     <div class="screen-scroll">
       <div class="section-header">
         <div class="title-wrap">
@@ -203,93 +161,82 @@
     </div>
   </section>
 
-  <!-- ============== CONTACT SECTION ============== -->
+ <!-- CONTACT SECTION -->
   <section id="contact" class="screen">
     <div class="contact-slab" aria-hidden="true"></div>
 
-    <div class="section-header">
-      <div class="title-wrap">
-        <img src="assets/Contacts.png" alt="Contacts" class="section-title">
-      </div>
-    </div>
-
-    <!-- CallingCard1.png sits center-stage until clicked; everything
-         below (Dialogue box, social icons, message form) is hidden
-         until then. Resets on every fresh visit to this screen so the
-         card's pop-in animation plays again — see script.js. -->
-    <div class="calling-card-showcase" id="calling-card-showcase">
-      <button class="calling-card-btn" id="calling-card-btn" type="button" aria-label="Open the contact form">
-        <img src="assets/CallingCard1.png" alt="" class="calling-card-img">
-      </button>
-
-      <div class="contact-reveal" id="contact-reveal">
-        <div class="contact-list">
-          <a class="contact-chip" href="mailto:punay.stevenkenn.bscs2025@gmail.com" aria-label="Email">
-            <img src="assets/Email.png" alt="" class="contact-chip-img">
-          </a>
-          <a class="contact-chip" href="https://www.facebook.com/stevn.not/" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="assets/Facebook.png" alt="" class="contact-chip-img">
-          </a>
-          <a class="contact-chip" href="https://www.instagram.com/stvn_not/?hl=en" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="assets/Insta.png" alt="" class="contact-chip-img">
-          </a>
-          <a class="contact-chip" href="https://github.com/Greends4052" target="_blank" rel="noopener" aria-label="GitHub">
-            <img src="assets/Git.png" alt="" class="contact-chip-img">
-          </a>
-          <a class="contact-chip" href="assets/Files/Steven_Punay_CV.pdf" download="Steven_Punay_CV.pdf" aria-label="Download CV">
-            <img src="assets/CVpic.png" alt="" class="contact-chip-img">
-          </a>
+    <div class="screen-scroll">
+      <div class="section-header">
+        <div class="title-wrap">
+          <img src="assets/Contacts.png" alt="Contacts" class="section-title">
         </div>
-
-        <!-- Message form — relayed to your inbox via formsubmit.co.
-             NOTE: the first-ever submission emails you a one-time activation link. -->
-        <form id="contact-form" class="contact-form" novalidate>
-          <img src="assets/Send.png" alt="Send me a message" class="form-head-img">
-          <label class="field">
-            <img src="assets/Name.png" alt="Name" class="field-label-img">
-            <input type="text" name="name" required maxlength="100" autocomplete="name">
-          </label>
-          <label class="field">
-            <img src="assets/SendEmail.png" alt="Your email" class="field-label-img">
-            <input type="email" name="email" required maxlength="150" autocomplete="email">
-          </label>
-          <label class="field">
-            <img src="assets/Message.png" alt="Message" class="field-label-img">
-            <textarea name="message" required rows="5" maxlength="3000"></textarea>
-          </label>
-          <!-- honeypot: bots fill this, humans never see it -->
-          <input type="text" name="_honey" tabindex="-1" autocomplete="off"
-                 style="position:absolute;left:-5000px" aria-hidden="true">
-          <div class="form-foot">
-            <button type="submit" class="form-send" aria-label="Send it">
-              <img src="assets/Sent.png" alt="" class="form-send-img">
-            </button>
-            <div id="form-status" role="status"></div>
-          </div>
-        </form>
       </div>
+
+      <div class="calling-card-showcase" id="calling-card-showcase">
+        <button class="calling-card-btn" id="calling-card-btn" type="button" aria-label="Open the contact form">
+          <img src="assets/CallingCard1.png" alt="" class="calling-card-img">
+        </button>
+
+        <div class="contact-reveal" id="contact-reveal">
+          <div class="contact-list">
+            <a class="contact-chip" href="mailto:punay.stevenkenn.bscs2025@gmail.com" aria-label="Email">
+              <img src="assets/Email.png" alt="" class="contact-chip-img">
+            </a>
+            <a class="contact-chip" href="https://www.facebook.com/stevn.not/" target="_blank" rel="noopener" aria-label="Facebook">
+              <img src="assets/Facebook.png" alt="" class="contact-chip-img">
+            </a>
+            <a class="contact-chip" href="https://www.instagram.com/stvn_not/?hl=en" target="_blank" rel="noopener" aria-label="Instagram">
+              <img src="assets/Insta.png" alt="" class="contact-chip-img">
+            </a>
+            <a class="contact-chip" href="https://github.com/Greends4052" target="_blank" rel="noopener" aria-label="GitHub">
+              <img src="assets/Git.png" alt="" class="contact-chip-img">
+            </a>
+            <a class="contact-chip" href="assets/Files/Steven_Punay_CV.pdf" download="Steven_Punay_CV.pdf" aria-label="Download CV">
+              <img src="assets/CVpic.png" alt="" class="contact-chip-img">
+            </a>
+          </div>
+
+          <form id="contact-form" class="contact-form" novalidate>
+            <img src="assets/Send.png" alt="Send me a message" class="form-head-img">
+            <label class="field">
+              <img src="assets/Name.png" alt="Name" class="field-label-img">
+              <input type="text" name="name" required maxlength="100" autocomplete="name">
+            </label>
+            <label class="field">
+              <img src="assets/SendEmail.png" alt="Your email" class="field-label-img">
+              <input type="email" name="email" required maxlength="150" autocomplete="email">
+            </label>
+            <label class="field">
+              <img src="assets/Message.png" alt="Message" class="field-label-img">
+              <textarea name="message" required rows="5" maxlength="3000"></textarea>
+            </label>
+            <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-5000px" aria-hidden="true">
+            <div class="form-foot">
+              <button type="submit" class="form-send" aria-label="Send it">
+                <img src="assets/Sent.png" alt="" class="form-send-img">
+              </button>
+              <div id="form-status" role="status"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <img src="assets/Jack.png" alt="" class="contact-side-art" aria-hidden="true" onerror="this.remove()">
+
+      <footer>
+        <span>&copy; 2026 Steven Punay. All rights reserved.</span>
+        <span>Built with intent, not templates.</span>
+      </footer>
     </div>
-
-    <img src="assets/Jack.png" alt="" class="contact-side-art" aria-hidden="true" onerror="this.remove()">
-
-    <footer>
-      <span>&copy; 2026 Steven Punay. All rights reserved.</span>
-      <span>Built with intent, not templates.</span>
-    </footer>
   </section>
 
-  <!-- ============== SCREEN WIPE TRANSITION ==============
-       Covers the screen with three diagonal panes whenever a
-       menu link is clicked; the target section swaps in while
-       covered, then the panes sweep off to reveal it. -->
+  <!-- SCREEN WIPE TRANSITION -->
   <div id="wipe" aria-hidden="true">
     <div class="pane p3"></div>
     <div class="pane p2"></div>
     <div class="pane p1"></div>
   </div>
 
-  <!-- my own script, loaded at the end so the HTML is ready first -->
   <script src="script.js"></script>
-
 </body>
 </html>

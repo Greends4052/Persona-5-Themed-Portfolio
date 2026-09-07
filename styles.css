@@ -2,7 +2,6 @@
    MY PORTFOLIO WEBSITE - STYLES
    =================================================== */
 
-/* -------- COLORS I USE ON THIS SITE -------- */
 :root {
   --red: #e60012;
   --black: #1a1a1a;
@@ -12,7 +11,7 @@
   --line: rgba(245, 242, 234, 0.14);
 }
 
-/* -------- RESET (so every browser looks the same) -------- */
+/* -------- RESET & BASE -------- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -23,24 +22,29 @@ html, body {
   height: 100%;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
 body {
   background: var(--black);
   color: var(--paper);
   font-family: 'Work Sans', sans-serif;
   overflow: hidden;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* little dotted texture over the whole page, just for looks.
-   Sized a bit past the viewport (see the -20px inset below) so
-   the parallax drift never uncovers a bare edge. */
+a,
+button {
+  touch-action: manipulation; /* removes the ~300ms tap delay on mobile browsers */
+}
+
 body::before {
   content: "";
   position: fixed;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
+  inset: -20px;
   z-index: 0;
   pointer-events: none;
   opacity: 0.05;
@@ -48,17 +52,17 @@ body::before {
   background-size: 14px 14px;
 }
 
-/* ===================================================
-   BACKGROUND PARALLAX
-   script.js tracks the cursor and writes --par-x / --par-y
-   (in px) onto <html>, eased so it trails the mouse a beat
-   behind. Every decorative background layer below reads
-   those two variables and drifts the OPPOSITE way, so the
-   backdrop reads like a plane sitting behind the content.
-   --depth just tunes how far each layer travels relative to
-   the others — bigger number, bigger drift. Turned off for
-   people who asked for reduced motion (see script.js).
-   =================================================== */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--paper);
+}
+
+/* -------- BACKGROUND PARALLAX -------- */
 .hero-slab,
 .about-slab,
 .designs-bg,
@@ -74,58 +78,56 @@ body::before {
 }
 
 body::before             { --depth: 0.35; }
-.hero-slab                { --depth: 1; }
-.about-slab                { --depth: 1; }
-.contact-slab              { --depth: 1; }
-.designs-bg                { --depth: 1.3; }
-.work-bg                   { --depth: 1.1; }
-.education-bg              { --depth: 0.9; }
+.hero-slab               { --depth: 1; }
+.about-slab              { --depth: 1; }
+.contact-slab            { --depth: 1; }
+.designs-bg              { --depth: 1.3; }
+.work-bg                 { --depth: 1.1; }
+.education-bg            { --depth: 0.9; }
 .education-bg-grey::before { --depth: 1.3; }
-#work::before               { --depth: 0.9; }
-#work::after                { --depth: 0.55; }
+#work::before             { --depth: 0.9; }
+#work::after              { --depth: 0.55; }
 
-/* PERFORMANCE FIX: script.js writes --par-x/--par-y on <html> every
-   animation frame, and every rule above re-reads them — that used to
-   mean 6 different full-viewport layers recalculating style 60x/sec
-   EVEN on screens that were hidden (visibility:hidden). Only the
-   layer belonging to the screen the visitor is actually looking at
-   needs to track the mouse; everything else is pinned still. */
+/* Performance optimization: pause transform on inactive screens */
 .screen:not(.active) .hero-slab,
 .screen:not(.active) .about-slab,
 .screen:not(.active) .designs-bg,
 .screen:not(.active) .work-bg,
 .screen:not(.active) .education-bg,
 .screen:not(.active) .contact-slab,
-.screen:not(.active) .education-bg-grey::before {
-  transform: none;
-}
-
+.screen:not(.active) .education-bg-grey::before,
 #work:not(.active)::before,
 #work:not(.active)::after {
   transform: none;
 }
 
-/* the big bold headline font used a few times */
-.display {
-  font-family: 'Anton', sans-serif;
-  font-style: italic;
-  letter-spacing: 0.01em;
-  line-height: 0.9;
+/* -------- KEYFRAMES -------- */
+@keyframes stripe-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 300px 150px; }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@keyframes stripe-drift-transform {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(300px, 150px, 0); }
 }
 
-::selection {
-  background: var(--red);
-  color: var(--paper);
+@keyframes slice-in {
+  from { clip-path: inset(0 100% 0 0); opacity: 0; }
+  to   { clip-path: inset(0 0 0 0); opacity: 1; }
 }
 
-/* ===================================================
-   HERO SECTION (top of page)
-   =================================================== */
+@keyframes slice-in-up {
+  from { clip-path: inset(0 0 100% 0); opacity: 0; }
+  to   { clip-path: inset(0 0 0% 0); opacity: 1; }
+}
+
+@keyframes card-flutter {
+  0%, 100% { transform: scale(1.04) rotate(-1deg); }
+  50%      { transform: scale(1.04) rotate(1deg); }
+}
+
+/* -------- HERO SECTION -------- */
 .hero {
   position: fixed;
   inset: 0;
@@ -148,64 +150,26 @@ a {
   gap: 1.4rem;
 }
 
-/* the big diagonal background shape behind the hero text.
-   used to be a plain red color, now it's a city photo.
-   Fixed (not absolute) so it stays put even if .hero scrolls.
-   Sized 40px past the viewport on every side so the parallax
-   drift in script.js never uncovers a bare edge. */
 .hero-slab {
   position: fixed;
-  top: -40px;
-  left: -40px;
-  right: -40px;
-  bottom: -40px;
+  inset: -40px;
   z-index: -1;
-  background-image: url("assets/City.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url("assets/City.png") center/cover no-repeat;
   clip-path: polygon(0 0, 100% 0, 100% 62%, 0 78%);
 }
 
-/* a dark red tint on top of the photo so the text on top still reads well */
 .hero-slab::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: var(--red);
   opacity: 0.7;
 }
 
-/* PERFORMANCE FIX #2: animating background-position forces the browser
-   to repaint the whole layer on every frame, no matter how it's timed.
-   transform, on the other hand, can be handled entirely by the GPU
-   compositor with zero repainting. Translating the *whole* oversized
-   layer by the same (300px, 150px) produces the exact same visual
-   drift as shifting the background used to — just far cheaper. Used
-   on hero/about/contact's stripe layers below.
-   #work::after keeps the old background-position version instead,
-   since #work::after already has its own mouse-parallax `transform`
-   (see the shared parallax rule above) — animating transform there
-   too would fight that rule and cancel the parallax drift out. */
-@keyframes stripe-drift {
-  from { background-position: 0 0; }
-  to   { background-position: 300px 150px; }
-}
-
-@keyframes stripe-drift-transform {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(300px, 150px, 0); }
-}
 .hero-slab::after {
   content: "";
   position: absolute;
-  top: -350px;
-  left: -350px;
-  right: -350px;
-  bottom: -350px;
+  inset: -350px;
   background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
   animation: stripe-drift-transform 10s linear infinite;
   will-change: transform;
@@ -217,18 +181,6 @@ a {
   animation: slice-in 0.7s cubic-bezier(.2, .9, .25, 1) both;
 }
 
-@keyframes slice-in {
-  from {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0;
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
-  }
-}
-
-/* the "Take Your Portfolio" title image that replaced the old heading text */
 .hero-title-img {
   display: block;
   width: 100%;
@@ -242,7 +194,6 @@ a {
   filter: drop-shadow(6px 6px 0 var(--red));
 }
 
-/* -------- CALLING CARD -------- a small image sitting under the hero title */
 .calling-card {
   display: block;
   width: auto;
@@ -253,17 +204,11 @@ a {
   transition: filter 0.25s ease;
 }
 
-@keyframes card-flutter {
-  0%, 100% { transform: scale(1.04) rotate(-1deg); }
-  50% { transform: scale(1.04) rotate(1deg); }
-}
-
 .calling-card:hover {
   animation: card-flutter 0.5s ease-in-out infinite;
   cursor: default;
 }
 
-/* -------- the vertical menu list stacked below the hero content -------- */
 .command-stack {
   position: relative;
   z-index: 2;
@@ -273,20 +218,8 @@ a {
   gap: 0;
   max-width: 640px;
   flex-shrink: 0;
-  /* nudges the whole menu left, independent of the hero's own padding */
   margin-left: clamp(-3rem, -5vw, -1rem);
   animation: slice-in-up 0.7s 0.15s cubic-bezier(.2, .9, .25, 1) both;
-}
-
-@keyframes slice-in-up {
-  from {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0;
-  }
-  to {
-    clip-path: inset(0 0 0% 0);
-    opacity: 1;
-  }
 }
 
 .command-stack li {
@@ -306,7 +239,6 @@ a {
   padding: 0.05rem 2.3rem 0.05rem 1.1rem;
 }
 
-/* the arrow that appears to the right of the item on hover/focus */
 .command-stack a::before {
   content: "▶";
   position: absolute;
@@ -319,7 +251,6 @@ a {
   transition: opacity 0.15s ease;
 }
 
-/* the black skewed block that slides in behind the item on hover/focus */
 .command-stack a::after {
   content: "";
   position: absolute;
@@ -357,59 +288,25 @@ a {
   filter: drop-shadow(9px 9px 0 rgba(0, 0, 0, 0.45));
 }
 
-@media (max-width: 900px) {
-  .command-stack img {
-    height: 70px;
-  }
-  .command-stack a {
-    padding-left: 1.1rem;
-    padding-right: 1.8rem;
-  }
-  .command-stack {
-    margin-left: 0;
-  }
-}
-
-/* ===================================================
-   GENERIC SECTION LAYOUT (used by every section below hero)
-   Every section is now a full-viewport "screen" — only one
-   is visible at a time, swapped by clicking a menu link
-   (see the screen-navigation script), not by scrolling.
-   =================================================== */
+/* -------- GENERIC SECTION LAYOUT -------- */
 section {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 7rem clamp(1.25rem, 6vw, 6rem);
+  padding-left: calc(clamp(1.25rem, 6vw, 6rem) + env(safe-area-inset-left));
+  padding-right: calc(clamp(1.25rem, 6vw, 6rem) + env(safe-area-inset-right));
 }
 
-/* hidden by default; .active (toggled by JS) reveals the current one */
 .screen {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.25s ease;
   z-index: 1;
-}
-
-/* -------- TITLE-LOCK FIX (legacy note) --------
-   Designs/Projects/Education scroll on THIS wrapper, not on the
-   <section> itself, which keeps things stable across browsers.
-   The title now lives inside this wrapper too (see index.html), so
-   it scrolls away with everything else — top padding is trimmed
-   since the title supplies its own spacing via .section-header's
-   margin-bottom; bottom padding stays generous so the last bit of
-   content never sits flush against the viewport edge. */
-.screen-scroll {
-  position: absolute;
-  inset: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 2rem clamp(1.25rem, 6vw, 6rem) 7rem;
 }
 
 .screen.active {
@@ -419,44 +316,16 @@ section {
   z-index: 2;
 }
 
-/* ===================================================
-   ABOUT SECTION
-   =================================================== */
-/* the About section is full-bleed so the Confidant image can fill it
-   completely — .about-scroll stays padding:0 so that art still runs
-   edge-to-edge. The title now lives inside .about-scroll too, so it
-   gets its own inset below (see .about-scroll .section-header)
-   instead of the wrapper being padded, which would also indent the art. */
-#about {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  padding: 0;
-}
-
-.about-scroll {
+.screen-scroll {
   position: absolute;
   inset: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 0;
+  padding: 2rem clamp(1.25rem, 6vw, 6rem) 7rem;
+  padding-left: calc(clamp(1.25rem, 6vw, 6rem) + env(safe-area-inset-left));
+  padding-right: calc(clamp(1.25rem, 6vw, 6rem) + env(safe-area-inset-right));
 }
 
-/* only the title gets an inset here, the full-bleed art below it doesn't */
-.about-scroll .section-header {
-  padding: 2rem clamp(1.25rem, 6vw, 6rem) 0;
-  margin-bottom: 0;
-}
-
-/* -------- SHARED SECTION TITLE TREATMENT --------
-   Every section (About/Designs/Projects/Education/Contact) shows its
-   title image top-left with the same skewed red underline. It now
-   lives inside each section's own scrolling wrapper (in the markup),
-   so it scrolls away with the rest of the content instead of staying
-   pinned on screen — this rule just adds the gap before whatever
-   comes after it. */
 .section-header {
   position: relative;
   z-index: 1;
@@ -486,18 +355,30 @@ section {
   transform: skewX(-18deg);
 }
 
-/* same treatment as the hero's background slab (tinted photo + diagonal
-   stripes), just a different image and no diagonal clip since this
-   section's content isn't shaped like the hero's. Sized 40px past the
-   viewport so the parallax drift never uncovers a bare edge. */
+/* -------- ABOUT SECTION -------- */
+#about,
+#education {
+  padding: 0;
+}
+
+.about-scroll {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.about-scroll .section-header {
+  padding: 2rem clamp(1.25rem, 6vw, 6rem) 0;
+  margin-bottom: 0;
+}
+
 .about-slab {
   position: fixed;
   inset: -40px;
   z-index: 0;
-  background-image: url("assets/maruki.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url("assets/maruki.png") center/cover no-repeat;
   clip-path: polygon(0 8%, 100% 0, 100% 92%, 0 100%);
 }
 
@@ -512,19 +393,13 @@ section {
 .about-slab::after {
   content: "";
   position: absolute;
-  top: -350px;
-  left: -350px;
-  right: -350px;
-  bottom: -350px;
+  inset: -350px;
   background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
   animation: stripe-drift-transform 14s steps(24) infinite;
   will-change: transform;
   contain: paint;
 }
 
-/* Used to be three separately-positioned PNGs (Steven, Rank,
-   Councillor) layered on top of each other; now it's a single
-   pre-composed image. */
 .confidant-stack {
   position: relative;
   z-index: 1;
@@ -536,7 +411,6 @@ section {
   display: block;
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto;
   position: relative;
   top: -75px;
@@ -549,24 +423,7 @@ section {
   filter: drop-shadow(6px 6px 0 var(--red));
 }
 
-/* Designs is now a phone-call scene: a ringing Phone.png centered on a
-   rotating-star backdrop (same star treatment used elsewhere), no photo
-   background. Answering the call slides Line.png up with 8 Metanav app
-   icons on it. */
-#designs {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-}
-
-/* ===================================================
-   DESIGNS SECTION BACKGROUND — two counter-rotating star
-   outlines drifting behind the phone/app content. Sized 50px
-   past the viewport (this layer drifts the furthest of the
-   bunch) so the parallax never uncovers a bare edge.
-   =================================================== */
+/* -------- DESIGNS SECTION -------- */
 .designs-bg {
   position: fixed;
   inset: -50px;
@@ -592,28 +449,15 @@ section {
   to { transform: rotate(360deg); }
 }
 
-#designs .phone-showcase {
-  position: relative;
-  z-index: 1;
-}
-
-/* ===================================================
-   DESIGNS SECTION: TITLE / PHONE / LINE / METANAV
-   Phone.png rings center-stage. Answering it slides Line.png
-   up from the bottom (same pulled-from-pocket motion as
-   before) with 9 Metanav app icons laid across it. Clicking
-   an app reveals a placeholder preview; Esc is the only way
-   back to the icon view (see script.js).
-   =================================================== */
 .phone-showcase {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 70vh;
 }
 
-/* -------- Phone (center stage until answered) -------- */
 .phone-btn {
   position: relative;
   z-index: 2;
@@ -643,14 +487,12 @@ section {
   60%, 100% { transform: rotate(0deg); }
 }
 
-/* once answered, the phone icon steps out of the way */
 .phone-showcase.is-answered .phone-btn {
   opacity: 0;
   pointer-events: none;
   transform: scale(0.7);
 }
 
-/* -------- Line panel: slides up like pulling your phone from your pocket -------- */
 .line-panel {
   position: absolute;
   top: 50%;
@@ -675,7 +517,6 @@ section {
   height: auto;
 }
 
-/* -------- 8 Metanav app icons laid out across Line.png -------- */
 .metanav-grid {
   position: absolute;
   inset: 0;
@@ -687,9 +528,6 @@ section {
   pointer-events: none;
 }
 
-/* positioned like the original single icon: plain top/left percentages
-   you can edit directly to place each one anywhere on Line.png. The tilt
-   lives in its own rule below so moving one doesn't affect its angle. */
 .metanav-btn {
   position: absolute;
   width: 15%;
@@ -716,7 +554,6 @@ section {
   filter: drop-shadow(5px 7px 0 rgba(0, 0, 0, 0.5));
 }
 
-/* click animation: a quick squash-and-pop, replayed via JS toggling this class */
 @keyframes metanav-pulse {
   0% { transform: scale(1) rotate(6deg); }
   40% { transform: scale(0.78) rotate(6deg); }
@@ -728,9 +565,6 @@ section {
   animation: metanav-pulse 0.35s ease;
 }
 
-/* Each icon's position, one rule per icon so they can each be moved
-   independently — same angle as the original single Metanav, just
-   multiplied to 8 and spread across Line.png like an app grid. */
 .metanav-btn[data-index="0"] { top: 10%; left: 35%; }
 .metanav-btn[data-index="1"] { top: 13%; left: 53%; }
 .metanav-btn[data-index="2"] { top: 16%; left: 71%; }
@@ -740,7 +574,6 @@ section {
 .metanav-btn[data-index="6"] { top: 55%; left: 31%; }
 .metanav-btn[data-index="7"] { top: 57.5%; left: 49%; }
 .metanav-btn[data-index="8"] { top: 60%; left: 67%; }
-
 
 .line-content {
   position: absolute;
@@ -771,9 +604,6 @@ section {
   filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.5));
 }
 
-/* Each app's revealed content gets its own position, same pattern as
-   the icons themselves — edit top/left/width per index below to place
-   each piece exactly where you want it on Line.png. */
 .line-content-img[data-index="0"] { top: 7%; left: 30%; }
 .line-content-img[data-index="1"] { top: 35%; left: 27%; width: 68%; }
 .line-content-img[data-index="2"] { top: 5%; left: 33%; width: 50%; }
@@ -784,11 +614,6 @@ section {
 .line-content-img[data-index="7"] { top: 14%; left: 28%; width: 60%; }
 .line-content-img[data-index="8"] { top: 14%; left: 28%; width: 60%; }
 
-/* -------- Esc hint: quiet "how to go back" reminder --------
-   Sits just outside the left edge of Line.png. Hidden by default;
-   script.js adds .is-visible about 1s after a design preview opens,
-   and removes it immediately on Back/Esc/reset so it never lingers
-   once the visitor already knows what to do. */
 .esc-hint {
   position: absolute;
   top: 50%;
@@ -809,52 +634,7 @@ section {
   transform: translateY(-50%) translateX(0);
 }
 
-@media (max-width: 860px) {
-  .line-panel {
-    width: min(94%, 420px);
-  }
-  .section-header {
-    margin-bottom: 1.75rem;
-  }
-  .section-title {
-    width: clamp(130px, 34vw, 200px);
-  }
-  /* not enough room to the left on narrow screens — sit it above instead */
-  .esc-hint {
-    top: -14%;
-    left: 50%;
-    width: 40%;
-    min-width: 80px;
-    max-width: 160px;
-    transform: translateX(-50%) translateY(8px);
-  }
-  .esc-hint.is-visible {
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-
-/* was relying on the generic "section" rule (which scrolls itself); now
-   only its .screen-scroll child scrolls, same fix as #designs/#work above.
-   Position/inset/height are restated explicitly here (not just inherited
-   from the generic "section" rule) so this section's fixed title can
-   never end up sharing a scroll container with its content — that's
-   what was letting it drift while scrolling. */
-#education {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  padding: 0;
-}
-
-/* -------- EDUCATION SECTION BACKGROUND --------
-   Same diagonal seam as before: the red half (under the CV box)
-   keeps its tiled star field plus the hero's red tint overlay. The
-   grey half (under JackFrost.png) no longer has stars at all — it's
-   the same drifting dot texture used elsewhere on the site (see
-   body::before), tracking the mouse via the shared parallax system. */
+/* -------- EDUCATION SECTION BACKGROUND -------- */
 .education-bg {
   position: fixed;
   inset: -30px;
@@ -879,8 +659,6 @@ section {
   clip-path: polygon(58% 0, 100% 0, 100% 100%, 42% 100%);
 }
 
-/* same red tint used on .hero-slab::before, layered on top of the
-   tiled stars underneath */
 .education-bg-red::after {
   content: "";
   position: absolute;
@@ -889,7 +667,6 @@ section {
   opacity: 0.7;
 }
 
-/* tiled star field, red-tinted — same tiling technique as .work-bg svg */
 .edu-tiles {
   position: absolute;
   top: 50%;
@@ -900,11 +677,6 @@ section {
   animation: work-star-spin 110s linear infinite;
 }
 
-/* dot texture, same pattern as body::before, sized past the wedge's
-   own edges so the parallax drift never uncovers a bare corner —
-   darker and more opaque than the body-wide dots so it actually reads
-   against the wedge, matching the bolder contrast of the Designs
-   section's star shapes */
 .education-bg-grey::before {
   content: "";
   position: absolute;
@@ -914,48 +686,11 @@ section {
   background-size: 16px 16px;
 }
 
-/* ===================================================
-   SMALL PHONES (≤480px)
-   A few spots that were fine down to ~600px but got tight
-   right at the narrowest common phone widths (iPhone SE etc).
-   =================================================== */
-@media (max-width: 480px) {
-  section,
-  .screen-scroll,
-  .about-scroll {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .hero {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 2.5rem;
-  }
-
-  /* 280px cards + 1rem padding on each side left almost no margin at
-     exactly 320px-wide screens — drop the minimum so it never crowds */
-  .project-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.2rem;
-  }
-
-  .contact-form {
-    max-width: 100%;
-  }
-
-  .cv-viewer {
-    padding: 1.1rem;
-  }
-
-  .section-title {
-    width: clamp(120px, 40vw, 170px);
-  }
+/* -------- PROJECTS / WORK SECTION -------- */
+#work {
+  background: var(--charcoal);
 }
 
-/* ===================================================
-   PROJECTS SECTION CARD GRID
-   =================================================== */
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -979,24 +714,6 @@ section {
   filter: drop-shadow(8px 8px 0 rgba(0, 0, 0, 0.4));
 }
 
-/* Projects gets its own background so it doesn't read as identical to
-   every other flat-black section: a dark charcoal base with a soft
-   diagonal red wash bleeding in from the top-right corner. */
-#work {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  background: var(--charcoal);
-}
-
-/* ===================================================
-   PROJECTS SECTION BACKGROUND — a tiled star field built
-   with inline SVG (no external gif). Grayscale, matching the
-   section's original charcoal palette — sits behind the
-   existing red wash/stripe overlay above.
-   =================================================== */
 .work-bg {
   position: fixed;
   inset: -30px;
@@ -1005,8 +722,6 @@ section {
   pointer-events: none;
 }
 
-/* oversized and centered so the rotation never uncovers a bare edge —
-   same slow drifting-star idea as .bg-star in the Designs section */
 .work-bg svg {
   position: absolute;
   top: 50%;
@@ -1039,10 +754,7 @@ section {
 #work::after {
   content: "";
   position: fixed;
-  top: -350px;
-  left: -350px;
-  right: -350px;
-  bottom: -350px;
+  inset: -350px;
   background: repeating-linear-gradient(115deg, rgba(230, 0, 18, 0.05) 0px, rgba(230, 0, 18, 0.05) 2px, transparent 2px, transparent 16px);
   animation: stripe-drift 14s steps(24) infinite;
   z-index: 0;
@@ -1056,15 +768,7 @@ section {
   z-index: 1;
 }
 
-/* ===================================================
-   ABOUT / CV SECTION (was the education timeline)
-   =================================================== */
-
-/* -------- JackFrost.png: big decorative overlay, right side --------
-   Sized taller than the viewport and pushed partly off the right edge
-   on purpose, so it bleeds off-screen rather than sitting fully framed.
-   Capped with a max-width so it never eats into the .paper text column,
-   and hidden below a width where there isn't room for both. */
+/* -------- EDUCATION / CV VIEW -------- */
 .education-side-art {
   position: absolute;
   top: 50%;
@@ -1079,37 +783,27 @@ section {
   filter: drop-shadow(10px 10px 0 rgba(0, 0, 0, 0.4));
 }
 
-@media (max-width: 1150px) {
-  .education-side-art {
-    display: none;
-  }
-}
-
-/* -------- CV box: displays CV.png as the box's content -------- */
 .cv-viewer {
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 620px;
   max-height: min(78vh, 820px);
-  margin-top: 1.75rem; /* a bit of breathing room below the title */
+  margin-top: 1.75rem;
   overflow-y: auto;
   background: var(--charcoal);
   border-left: 4px solid var(--red);
   padding: 1.6rem;
   display: flex;
-  align-items: flex-start; /* without this, flex stretches an auto-height
-                               child to fill the box, distorting the image */
+  align-items: flex-start;
 }
 
 .cv-image {
   display: block;
   width: 100%;
-  height: auto; /* sized from the file's own aspect ratio, never stretched */
+  height: auto;
 }
 
-/* CV download button in the Education section, now PDF.png with no
-   button box/text around it */
 .cv-btn {
   display: inline-block;
   margin-top: 2rem;
@@ -1130,77 +824,38 @@ section {
   height: auto;
 }
 
-/* ===================================================
-   CONTACT SECTION
-   =================================================== */
-
-/* base tone for the section itself is charcoal (grey) — the slab
-   below only paints over the bottom portion, so this grey shows
-   through up top, same idea as the hero but flipped. */
+/* -------- CONTACT SECTION -------- */
 #contact {
   background: var(--charcoal);
-  /* the title now lives in-flow at the top of this same scrolling
-     section (see index.html), so this just needs a small inset
-     above it rather than clearance for a separately-pinned title */
   padding-top: 2rem;
 }
 
-/* -------- background slab --------
-   Same technique as .hero-slab (photo + color tint + drifting diagonal
-   stripes, clipped to a diagonal band, tracked by the shared parallax
-   system) but mirrored top-to-bottom: the hero's photo band sits at
-   the TOP with plain dark space below it; here the photo band sits at
-   the BOTTOM (tinted red) with the plain charcoal grey above it.
-   Sized 40px past the viewport on every side so the parallax drift
-   never uncovers a bare edge. */
 .contact-slab {
   position: fixed;
-  top: -40px;
-  left: -40px;
-  right: -40px;
-  bottom: -40px;
+  inset: -40px;
   z-index: -1;
-  background-image: url("assets/Steven1.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url("assets/Steven1.png") center/cover no-repeat;
   clip-path: polygon(0 100%, 100% 100%, 100% 38%, 0 22%);
 }
 
-/* same red tint used on .hero-slab::before */
 .contact-slab::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: var(--red);
   opacity: 0.7;
 }
 
-/* same drifting diagonal stripes as every other slab */
 .contact-slab::after {
   content: "";
   position: absolute;
-  top: -350px;
-  left: -350px;
-  right: -350px;
-  bottom: -350px;
+  inset: -350px;
   background: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 14px);
   animation: stripe-drift-transform 10s linear infinite;
   will-change: transform;
   contain: paint;
 }
 
-/* -------- Jack.png: big decorative overlay, left side --------
-   Same treatment as .education-side-art (JackFrost.png), mirrored to
-   the left edge instead of the right: sized taller than the viewport
-   and pushed partly off-screen on purpose, capped so it can't eat into
-   the reveal content on the right, hidden below a width where there
-   isn't room for both. Stays invisible until the calling card has
-   actually been clicked open — the sibling selector below is why this
-   element lives right after .calling-card-showcase in the markup. */
 .contact-side-art {
   position: absolute;
   top: 80%;
@@ -1221,18 +876,6 @@ section {
   opacity: 1;
 }
 
-@media (max-width: 1150px) {
-  .contact-side-art {
-    display: none;
-  }
-}
-
-/* -------- CallingCard1.png reveal --------
-   Same "answer to reveal" idea as the Designs phone: the card sits
-   center-stage until clicked, then the whole contact panel (Dialogue
-   box, social icons, message form) fades/slides in below it. Resets
-   every time this screen is (re)entered — see script.js — so the
-   card's pop-in animation plays fresh on each visit. */
 .calling-card-showcase {
   position: relative;
   z-index: 1;
@@ -1242,8 +885,6 @@ section {
   justify-content: center;
 }
 
-/* once opened, the reveal content (icons + form) sits on the RIGHT
-   side of the section, leaving Jack.png visible on the left */
 .calling-card-showcase.is-open {
   display: flex;
   align-items: flex-start;
@@ -1260,9 +901,6 @@ section {
   transition: transform 0.25s ease;
 }
 
-/* hover/focus lives on the button (parent) so it composes cleanly with
-   the ring animation running on .calling-card-img (child) below,
-   instead of both fighting over the same transform property */
 .calling-card-btn:hover,
 .calling-card-btn:focus-visible {
   transform: scale(1.08) translateY(-4px);
@@ -1291,9 +929,6 @@ section {
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-/* same wobble as the Designs phone's ring, just renamed for this
-   context — starts right as the pop-in finishes (matching delay) and
-   loops until the card is clicked */
 @keyframes card-ring {
   0%, 100% { transform: rotate(0deg); }
   10% { transform: rotate(-8deg); }
@@ -1327,18 +962,12 @@ section {
 }
 
 .contact-list {
-  /* now the first thing inside .contact-reveal, so this just gives it
-     a little breathing room below the calling card / section title */
   margin-top: clamp(1.5rem, 4vw, 2.5rem);
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* -------- social/contact icons --------
-   Each icon is its own PNG (Email/Facebook/Insta/Git/CVpic) rather
-   than a text chip; the container just gives it a soft, app-icon-style
-   rounded square. Tweak --chip-size/--chip-radius to resize. */
 .contact-chip {
   --chip-size: 56px;
   --chip-radius: 14px;
@@ -1367,7 +996,6 @@ section {
   object-fit: cover;
 }
 
-/* -------- message form -------- */
 .contact-form {
   margin-top: 2.6rem;
   max-width: 560px;
@@ -1376,7 +1004,6 @@ section {
   gap: 1.1rem;
 }
 
-/* "Send me a message" heading, now Send.png instead of text */
 .form-head-img {
   display: block;
   width: clamp(220px, 30vw, 340px);
@@ -1392,17 +1019,12 @@ section {
   color: var(--grey);
 }
 
-/* "Your email" / "Message" labels, now images instead of text */
 .field-label-img {
   display: block;
   width: clamp(110px, 16vw, 160px);
   height: auto;
 }
 
-/* Comic-panel style boxes, inspired by the thick-border/hard-shadow
-   treatment used elsewhere in the persona theme — paper background
-   with a bold black border, a slight skew for the dynamic feel, and
-   a hard offset red shadow on focus instead of a soft glow. */
 .field input,
 .field textarea {
   background: var(--paper);
@@ -1434,7 +1056,6 @@ section {
   flex-wrap: wrap;
 }
 
-/* "Send it" button, now Sent.png with no button box around it */
 .form-send {
   display: inline-block;
   background: none;
@@ -1460,9 +1081,7 @@ section {
   color: var(--grey);
 }
 
-/* ===================================================
-   FOOTER
-   =================================================== */
+/* -------- FOOTER -------- */
 footer {
   position: relative;
   z-index: 1;
@@ -1475,45 +1094,11 @@ footer {
   gap: 0.5rem;
 }
 
-/* turn animations off for people who asked for reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .hero-content {
-    animation: none;
-    clip-path: none;
-    opacity: 1;
-  }
-  .hero-slab::after,
-  .about-slab::after,
-  .contact-slab::after,
-  .bg-star,
-  .work-bg svg,
-  .edu-tiles,
-  #work::after {
-    animation: none;
-  }
-  .phone-img {
-    animation: none;
-  }
-  .calling-card-btn.is-entering .calling-card-img,
-  .contact-reveal.is-visible {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  .project-card,
-  .project-img,
-  .back-to-top {
-    transition: none;
-  }
-}
-
-/* ===================================================
-   BACK TO MAIN MENU BUTTON
-   =================================================== */
+/* -------- BACK TO MAIN MENU BUTTON -------- */
 .back-to-top {
   position: fixed;
-  right: clamp(1rem, 4vw, 2.5rem);
-  bottom: clamp(1rem, 4vw, 2.5rem);
+  right: calc(clamp(1rem, 4vw, 2.5rem) + env(safe-area-inset-right));
+  bottom: calc(clamp(1rem, 4vw, 2.5rem) + env(safe-area-inset-bottom));
   z-index: 60;
   display: block;
   line-height: 0;
@@ -1529,9 +1114,6 @@ footer {
   pointer-events: auto;
 }
 
-/* hidden while a Designs preview is open — Esc is the only way back,
-   and showing this button too made it look like there were two
-   different ways back (see script.js, .preview-open) */
 body.preview-open .back-to-top {
   opacity: 0;
   pointer-events: none;
@@ -1549,13 +1131,7 @@ body.preview-open .back-to-top {
   transform: translateY(0) scale(1.08) rotate(-4deg);
 }
 
-/* ===================================================
-   SCREEN WIPE TRANSITION
-   Three diagonal panes sweep across the screen whenever a
-   menu link is clicked. JS adds .go to play the sweep and
-   swaps which section has .active right as the panes fully
-   cover the viewport, partway through the animation.
-   =================================================== */
+/* -------- SCREEN WIPE TRANSITION -------- */
 #wipe {
   position: fixed;
   inset: -10%;
@@ -1587,15 +1163,179 @@ body.preview-open .back-to-top {
   100% { transform: translateX(130%) skewX(-14deg); }
 }
 
+/* -------- ACCESSIBILITY & MEDIA QUERIES -------- */
+@media (max-width: 1150px) {
+  .education-side-art,
+  .contact-side-art {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .command-stack img {
+    height: 70px;
+  }
+  .command-stack a {
+    padding-left: 1.1rem;
+    padding-right: 1.8rem;
+  }
+  .command-stack {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .line-panel {
+    width: min(94%, 420px);
+  }
+  .section-header {
+    margin-bottom: 1.75rem;
+  }
+  .section-title {
+    width: clamp(130px, 34vw, 200px);
+  }
+  .esc-hint {
+    top: -14%;
+    left: 50%;
+    width: 40%;
+    min-width: 80px;
+    max-width: 160px;
+    transform: translateX(-50%) translateY(8px);
+  }
+  .esc-hint.is-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-chip {
+    --chip-size: 48px;
+  }
+  .form-head-img,
+  .form-send-img {
+    width: clamp(150px, 42vw, 240px);
+  }
+  .field-label-img {
+    width: clamp(90px, 24vw, 140px);
+  }
+  .field input,
+  .field textarea {
+    font-size: 16px; /* keeps iOS Safari from auto-zooming in on focus */
+  }
+  .phone-showcase {
+    min-height: 56vh;
+  }
+  .confidant-img {
+    top: -30px;
+  }
+  .cv-btn-img {
+    width: clamp(120px, 30vw, 170px);
+  }
+}
+
+@media (max-width: 480px) {
+  section,
+  .screen-scroll,
+  .about-scroll {
+    padding-left: calc(1rem + env(safe-area-inset-left));
+    padding-right: calc(1rem + env(safe-area-inset-right));
+  }
+
+  .hero {
+    padding-left: calc(1rem + env(safe-area-inset-left));
+    padding-right: calc(1rem + env(safe-area-inset-right));
+    padding-top: 2.5rem;
+  }
+
+  .command-stack img {
+    height: 60px;
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .contact-form {
+    max-width: 100%;
+  }
+
+  .cv-viewer {
+    padding: 1.1rem;
+  }
+
+  .section-title {
+    width: clamp(120px, 40vw, 170px);
+  }
+}
+
+/* very short viewports — phones in landscape, folded devices */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero {
+    padding-top: 1.4rem;
+    padding-bottom: 2.5rem;
+  }
+  .hero-inner {
+    gap: 0.8rem;
+  }
+  .command-stack img {
+    height: 50px;
+  }
+  .section-header {
+    margin-bottom: 1rem;
+  }
+  .about-scroll .section-header {
+    padding-top: 1.2rem;
+  }
+  .phone-showcase {
+    min-height: 42vh;
+  }
+  .confidant-img {
+    top: 0;
+  }
+  .calling-card-showcase {
+    min-height: 34vh;
+  }
+  .cv-viewer {
+    max-height: min(60vh, 820px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hero-content {
+    animation: none;
+    clip-path: none;
+    opacity: 1;
+  }
+  .hero-slab::after,
+  .about-slab::after,
+  .contact-slab::after,
+  .bg-star,
+  .work-bg svg,
+  .edu-tiles,
+  #work::after {
+    animation: none;
+  }
+  .phone-img {
+    animation: none;
+  }
+  .calling-card-btn.is-entering .calling-card-img,
+  .contact-reveal.is-visible {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .project-card,
+  .project-img,
+  .back-to-top {
+    transition: none;
+  }
   #wipe {
     display: none;
   }
 }
 
-/* fixes a cross-browser quirk where clicking these buttons (not just
-   tabbing to them) still triggers :focus-visible, leaving a stray
-   outline box around Phone.png / a Metanav icon after the click */
+/* -------- FOCUS STYLES -------- */
 .phone-btn:focus,
 .metanav-btn:focus,
 .calling-card-btn:focus,
@@ -1610,8 +1350,8 @@ body.preview-open .back-to-top {
   outline-offset: 4px;
 }
 
-/* red focus outline so keyboard users can see what's selected */
-a:focus-visible, button:focus-visible {
+a:focus-visible, 
+button:focus-visible {
   outline: 2px solid var(--red);
   outline-offset: 3px;
 }
