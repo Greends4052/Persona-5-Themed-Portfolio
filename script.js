@@ -13,9 +13,9 @@
   if (!phoneShowcase || !phoneBtn || !linePanel || !metanavGrid || !lineContent || !metanavButtons.length) return;
 
   const projectPlaceholders = [
-    { image: 'Ap_poster.png', alt: 'Design 01' },
+    { image: 'Ap_Poster.png', alt: 'Design 01' },
     { image: 'Oni_Tiyan.png', alt: 'Design 02' },
-    { image: 'LED_Wall.gif', alt: 'Design 03' },
+    { image: 'Led_Wall.gif', alt: 'Design 03' },
     { image: 'Manga.png', alt: 'Design 04' },
     { image: 'Black.png', alt: 'Design 05' },
     { image: 'Gradient.png', alt: 'Design 06' },
