@@ -624,14 +624,31 @@ section {
   transform: translateY(-50%) translateX(-8px);
   opacity: 0;
   pointer-events: none;
-  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.5));
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   transition: opacity 0.4s ease, transform 0.4s ease;
   z-index: 3;
 }
 
 .esc-hint.is-visible {
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(-50%) translateX(0);
+}
+
+.esc-hint-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s ease;
+}
+
+.esc-hint:hover .esc-hint-img,
+.esc-hint:focus-visible .esc-hint-img {
+  transform: scale(1.08);
 }
 
 /* -------- EDUCATION SECTION BACKGROUND -------- */
@@ -1339,13 +1356,15 @@ body.preview-open .back-to-top {
 .phone-btn:focus,
 .metanav-btn:focus,
 .calling-card-btn:focus,
+.esc-hint:focus,
 .back-to-top:focus {
   outline: none;
 }
 
 .phone-btn:focus-visible,
 .metanav-btn:focus-visible,
-.calling-card-btn:focus-visible {
+.calling-card-btn:focus-visible,
+.esc-hint:focus-visible {
   outline: 2px solid var(--red);
   outline-offset: 4px;
 }

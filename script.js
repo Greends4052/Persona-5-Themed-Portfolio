@@ -92,6 +92,10 @@
 
   phoneBtn.addEventListener('click', answerPhone);
 
+  // tapping the Esc hint does the same thing pressing Esc does — lets
+  // mobile users (no keyboard) get back to the app grid
+  escHint?.addEventListener('click', backToApps);
+
   metanavButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       btn.classList.remove('is-clicked');
